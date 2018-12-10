@@ -38,7 +38,7 @@ cache:
 ## Install PHP and composer, and run the appropriate composer command
 install:
     - IF EXIST c:\tools\php (SET PHP=0) # Checks for the PHP install being cached
-    - appveyor-retry cinst curl 7zip
+    - appveyor-retry cinst -y curl 7zip
     - ps: $env:php_final_ver=((choco search php --exact --all-versions -r | select-string -pattern $env:php_ver_target | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
     - ps: echo $env:php_final_ver
     - ps: appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version $env:php_final_ver

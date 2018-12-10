@@ -4,7 +4,8 @@ platform:
 
 
 environment:
-  - win32service: 0.3.1
+  win32service: 0.3.1
+  
   matrix:
   - dependencies: lowest
     php_ver_target: 7.1

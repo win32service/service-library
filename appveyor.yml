@@ -40,7 +40,7 @@ install:
     - IF EXIST c:\tools\php (SET PHP=0) # Checks for the PHP install being cached
     - ps: $env:php_final_ver=((choco search php --exact --all-versions -r | select-string -pattern $env:php_ver_target | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
     - ps: echo $env:php_final_ver
-    - ps: appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version ((choco search php --exact --all-versions -r | select-string -pattern $env:php_ver_target | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
+    - ps: appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version $env:php_final_ver
     - cd c:\tools\php
     - cd ext
     - curl -fsSL -o php_win32service.zip https://windows.php.net/downloads/pecl/releases/win32service/%win32service%/php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip -H "User-Agent: PHP/7.2.15"

@@ -1,0 +1,33 @@
+{
+    "name":  "win32service/service-library",
+    "description": "Library for ease to use Win32Service PHP extension",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jean-Baptiste Nahan",
+            "email": "jean-baptiste@nahan.fr",
+            "homepage": "https://win32service.github.io",
+            "role": "Lead Dev"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Win32Service\\": "lib/"
+        },
+        "files": [
+            "lib/pollyfill.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Win32Service\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^7.1.0 <7.4.0",
+        "ext-win32service": "*"
+    },
+    "require-dev": {
+        "atoum/atoum": "^3.3"
+    }
+}

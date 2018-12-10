@@ -22,7 +22,7 @@ class ServiceStateManager extends atoum
         $this->assert('start')
             ->given($this->newTestedInstance())
             ->if($this->function->win32_query_service_status = ['CurrentState'=>WIN32_SERVICE_STOPPED])
-            ->and($this->function->win32_start_service = WIN32_ERROR_ACCESS_DENIED)
+            ->and($this->function->win32_start_service = WIN32_NO_ERROR)
             ->then
             ->variable($this->testedInstance->startService(\Win32Service\Model\ServiceIdentifier::identify('servideId')))->isNull
         ;

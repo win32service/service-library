@@ -38,7 +38,7 @@ class ServiceAdminManager
             throw new ServiceRegistrationException('Unable to register an existant service', 400);
         }
 
-        $result = win32_create_service($infos, $infos->machine());
+        $result = win32_create_service($infos->toArray(), $infos->machine());
 
         $this->checkResponseAndConvertInExceptionIfNeed($result, $infos);
         $this->throwExceptionIfError($result, ServiceRegistrationException::class, 'Error occured during registration service');

@@ -56,4 +56,9 @@ class ServiceIdentifier implements ServiceIdentificator
     {
         return $this->serviceId;
     }
+
+    public function __toString(): string
+    {
+        return sprintf('%s%s', empty($this->machine)? '':$this->machine.'\\', $this->serviceId);
+    }
 }

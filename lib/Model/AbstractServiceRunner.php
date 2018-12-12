@@ -71,6 +71,14 @@ abstract class AbstractServiceRunner
      */
     protected abstract function beforeContinue(): void;
 
+    /**
+     * Implement this function for run short code before service entering in stop status
+     */
+    protected abstract function beforeStop(): void;
+
+    /**
+     * Implement this function for tun short code if the main run code is too slow
+     */
     protected abstract function lastRunIsTooSlow(float $duration): void;
 
     public function doRun() {
@@ -119,6 +127,8 @@ abstract class AbstractServiceRunner
 
             $status = $this->getServiceInformations($this->serviceId);
         }
+        win32_set_service_status(WIN32_SERVICE_STOP_PENDING);
+        $this->beforeStop();
         win32_set_service_status(WIN32_SERVICE_STOPPED);
 
     }

@@ -3,7 +3,8 @@
  * This file is part of Win32Service Library package
  * @copy Win32Service (c) 2018
  * @author "Jean-Baptiste Nahan" <jean-baptiste@nahan.fr>
- */namespace Win32Service\Model;
+ */
+namespace Win32Service\Model;
 
 /**
  * Class ServiceInformations
@@ -121,6 +122,13 @@ class ServiceInformations implements \ArrayAccess, ServiceIdentificator
     public function __toString()
     {
         return (string) isset($this->datas[WIN32_INFO_DISPLAY])?
-            $this->datas[WIN32_INFO_DISPLAY]:$this->datas[WIN32_INFO_SERVICE];
+            $this->datas[WIN32_INFO_DISPLAY]:$this->serviceId();
+    }
+
+    public function toArray(): array
+    {
+        $datas = $this->datas;
+        $datas[WIN32_INFO_SERVICE]=$this->serviceId();
+        return $datas;
     }
 }

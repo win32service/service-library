@@ -86,7 +86,28 @@ class ServiceStateManager
             throw new InvalidServiceStatusException('The service is not stopped');
         }
 
-        $result = $action($serviceId->serviceId(), $serviceId->machine());
+        //$result = $action($serviceId->serviceId(), $serviceId->machine());
+        switch ($action) {
+            case 'win32_start_service':
+                $result = win32_start_service($serviceId->serviceId(), $serviceId->machine());
+                break;
+            
+            case 'win32_stop_service':
+                $result = win32_stop_service($serviceId->serviceId(), $serviceId->machine());
+                break;
+            
+            case 'win32_pause_service':
+                $result = win32_pause_service($serviceId->serviceId(), $serviceId->machine());
+                break;
+            
+            case 'win32_continue_service':
+                $result = win32_continue_service($serviceId->serviceId(), $serviceId->machine());
+                break;
+            
+            default:
+                # code...
+                break;
+        }
 
         $this->checkResponseAndConvertInExceptionIfNeed($result, $serviceId);
         $this->throwExceptionIfError(

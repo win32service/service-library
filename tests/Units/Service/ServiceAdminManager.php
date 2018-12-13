@@ -24,7 +24,15 @@ class ServiceAdminManager extends atoum
             ->if($this->function->win32_query_service_status = ['CurrentState'=>WIN32_SERVICE_STOPPED])
             ->and($this->function->win32_create_service = WIN32_NO_ERROR)
             ->then
-            ->variable($this->testedInstance->startService(\Win32Service\Model\ServiceIdentifier::identify('servideId')))->isNull
+            ->variable($this->testedInstance->registerService(
+                new \Win32Service\Model\ServiceInformations(
+                    \Win32Service\Model\ServiceIdentifier::identify('servideId'),
+                    'Test Service Add',
+                    'My description',
+                    'me.php',
+                    'run'
+                )
+            )->isNull
         ;
     }
 }

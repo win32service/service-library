@@ -32,7 +32,7 @@ class ServiceAdminManager extends atoum
                     'me.php',
                     'run'
                 )
-            )->isNull
+            ))->isNull
         ;
     }
 }

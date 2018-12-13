@@ -45,10 +45,7 @@ install:
     - cd c:\tools\php
     - cd ext
     - echo https://windows.php.net/downloads/pecl/releases/win32service/%win32service%/php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip
-    - appveyor DownloadFile https://windows.php.net/downloads/pecl/releases/win32service/%win32service%/php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip
-    - type php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip
-    - curl -v -o php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip https://windows.php.net/downloads/pecl/releases/win32service/%win32service%/php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip -A AppVeyor
-#    - curl -v -o php_win32service.zip https://windows.php.net/downloads/pecl/releases/win32service/%win32service%/php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip -H "User-Agent: PHP/7.2.15"
+    - curl -o php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip https://windows.php.net/downloads/pecl/releases/win32service/%win32service%/php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip -A AppVeyor
     - 7z e php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip *.dll
     - cd ..
     - IF %PHP%==1 copy php.ini-production php.ini /Y

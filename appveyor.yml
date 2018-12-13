@@ -5,6 +5,7 @@ platform:
 
 environment:
   win32service: 0.3.1
+  xdebug: 2.7.0beta1
   
   matrix:
 #  - dependencies: current
@@ -47,6 +48,8 @@ install:
     - echo https://windows.php.net/downloads/pecl/releases/win32service/%win32service%/php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip
     - curl -o php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip https://windows.php.net/downloads/pecl/releases/win32service/%win32service%/php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip -A AppVeyor
     - 7z e php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip *.dll
+    - curl -o php_xdebug-%xdebug%-%php_ver_target%-nts-%vc%-x64.zip https://windows.php.net/downloads/pecl/releases/xdebug/%xdebug%/php_xdebug-%xdebug%-%php_ver_target%-nts-%vc%-x64.zip -A AppVeyor
+    - 7z e php_xdebug-%xdebug%-%php_ver_target%-nts-%vc%-x64.zip *.dll
     - cd ..
     - IF %PHP%==1 copy php.ini-production php.ini /Y
     - IF %PHP%==1 echo date.timezone="UTC" >> php.ini
@@ -55,6 +58,7 @@ install:
     - IF %PHP%==1 echo extension=php_mbstring.dll >> php.ini
     - IF %PHP%==1 echo extension=php_win32service.dll >> php.ini
     - IF %PHP%==1 echo extension=php_fileinfo.dll >> php.ini
+    - IF %PHP%==1 echo zend_extension=php_xdebug.dll >> php.ini
     - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
     - appveyor-retry appveyor DownloadFile https://getcomposer.org/composer.phar
     - cd %APPVEYOR_BUILD_FOLDER%

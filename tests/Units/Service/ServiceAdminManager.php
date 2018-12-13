@@ -21,7 +21,7 @@ class ServiceAdminManager extends atoum
     {
         $this->assert('start')
             ->given($this->newTestedInstance())
-            ->if($this->function->win32_query_service_status = ['CurrentState'=>WIN32_ERROR_SERVICE_DOES_NOT_EXIST])
+            ->if($this->function->win32_query_service_status = WIN32_ERROR_SERVICE_DOES_NOT_EXIST)
             ->and($this->function->win32_create_service = WIN32_NO_ERROR)
             ->then
             ->variable($this->testedInstance->registerService(

@@ -10,6 +10,7 @@ namespace Win32Service\Service;
 
 use Win32Service\Exception\InvalidServiceStatusException;
 use Win32Service\Exception\ServiceStateActionException;
+use Win32Service\Exception\Win32ServiceException;
 use Win32Service\Model\ServiceIdentificator;
 
 class ServiceStateManager
@@ -26,7 +27,7 @@ class ServiceStateManager
      */
     public function startService(ServiceIdentificator $serviceId)
     {
-        $this->actionForService($serviceId, 'win32_start_service', 'isStopped');
+        $this->actionForService($serviceId, 'start', 'Stopped');
     }
 
     /**
@@ -39,7 +40,7 @@ class ServiceStateManager
      */
     public function stopService(ServiceIdentificator $serviceId)
     {
-        $this->actionForService($serviceId, 'win32_stop_service', 'isRunning');
+        $this->actionForService($serviceId, 'stop', 'Running');
     }
 
     /**
@@ -52,7 +53,7 @@ class ServiceStateManager
      */
     public function pauseService(ServiceIdentificator $serviceId)
     {
-        $this->actionForService($serviceId, 'win32_pause_service', 'isRunning');
+        $this->actionForService($serviceId, 'pause', 'Running');
     }
 
     /**
@@ -65,7 +66,25 @@ class ServiceStateManager
      */
     public function continueService(ServiceIdentificator $serviceId)
     {
-        $this->actionForService($serviceId, 'win32_continue_service', 'isPaused');
+        $this->actionForService($serviceId, 'continue', 'Paused');
+    }
+
+    /**
+     * @param ServiceIdentificator $serviceId
+     * @param int $control
+     * @throws Win32ServiceException
+     * @throws \Win32Service\Exception\ServiceAccessDeniedException
+     * @throws \Win32Service\Exception\ServiceNotFoundException
+     */
+    public function sendCustomControl(ServiceIdentificator $serviceId, int $control)
+    {
+        $result = win32_send_custom_control($serviceId->serviceId(), $serviceId->machine(), $control);
+        $this->checkResponseAndConvertInExceptionIfNeed($result, $serviceId);
+        $this->throwExceptionIfError(
+            $result,
+            Win32ServiceException::class,
+            sprintf('Unable to custom control %d', $control)
+        );
     }
 
     /**
@@ -82,25 +101,30 @@ class ServiceStateManager
     {
         $status = $this->getServiceInformations($serviceId);
 
-        if (!$status->{$check}()) {
-            throw new InvalidServiceStatusException('The service is not stopped');
+        $function = sprintf('is%s', $check);
+
+        if (!method_exists($status, $function)) {
+            throw new \LogicException(sprintf('The class %s does not implements %s', get_class($status), $function));
         }
 
-        //$result = $action($serviceId->serviceId(), $serviceId->machine());
+        if(!$status->{$function}()) {
+            throw new InvalidServiceStatusException(sprintf('The service is not %s',$check));
+        }
+
         switch ($action) {
-            case 'win32_start_service':
+            case 'start':
                 $result = win32_start_service($serviceId->serviceId(), $serviceId->machine());
                 break;
             
-            case 'win32_stop_service':
+            case 'stop':
                 $result = win32_stop_service($serviceId->serviceId(), $serviceId->machine());
                 break;
             
-            case 'win32_pause_service':
+            case 'pause':
                 $result = win32_pause_service($serviceId->serviceId(), $serviceId->machine());
                 break;
             
-            case 'win32_continue_service':
+            case 'continue':
                 $result = win32_continue_service($serviceId->serviceId(), $serviceId->machine());
                 break;
             
@@ -113,7 +137,7 @@ class ServiceStateManager
         $this->throwExceptionIfError(
             $result,
             ServiceStateActionException::class,
-            'Unable to start service'
+            sprintf('Unable to %s service', $action)
         );
 
     }

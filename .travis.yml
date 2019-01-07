@@ -1,0 +1,11 @@
+language: php
+php:
+  - '7.2'
+  - '7.3'
+
+addons:
+  sonarcloud:
+    organization: "win32service"
+      
+script:
+  - sonar-scanner -Dsonar.projectKey=win32service_service-library -Dsonar.organization=win32service -Dsonar.sources=./lib -Dsonar.host.url=https://sonarcloud.io -Dsonar.test.inclusions=tests/**

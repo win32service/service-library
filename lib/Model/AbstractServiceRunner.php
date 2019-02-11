@@ -52,9 +52,10 @@ abstract class AbstractServiceRunner
 
     /**
      * This function is runnning in loop. The running duration is limited to 30 seconds
+     * @param int $control contains the last control.
      * @return void
      */
-    protected abstract function run(): void;
+    protected abstract function run(int $control): void;
 
     /**
      * Implement this function setup the service before run loop
@@ -81,6 +82,12 @@ abstract class AbstractServiceRunner
      */
     protected abstract function lastRunIsTooSlow(float $duration): void;
 
+    /**
+     * @throws ServiceStatusException
+     * @throws Win32ServiceException
+     * @throws \Win32Service\Exception\ServiceAccessDeniedException
+     * @throws \Win32Service\Exception\ServiceNotFoundException
+     */
     public function doRun() {
         if (true !== win32_start_service_ctrl_dispatcher($this->serviceId->serviceId())) {
             throw new Win32ServiceException('Error on start service controller');
@@ -114,7 +121,7 @@ abstract class AbstractServiceRunner
             if (!$this->paused) {
                 // If not paused, run the action loop.
                 $startRun = microtime(true);
-                $this->run();
+                $this->run($ctr_msg);
                 $this->lastRunDuration= microtime(true) - $startRun;
                 if ($this->slowRunduration < $this->lastRunDuration) {
                     $this->slowRunduration = $this->lastRunDuration;
@@ -131,6 +138,25 @@ abstract class AbstractServiceRunner
         $this->beforeStop();
         win32_set_service_status(WIN32_SERVICE_STOPPED);
 
+    }
+
+    /**
+     * Define how the script do exit. If exit with $exitGraceful = false and $exitCode > 0, the recovery paramaters
+     * defined for the service will be executed. Otherwise, the service stop without recovery operation.
+     *
+     * See this page for exit code value :
+     *
+     * @param bool $exitGraceful If true, the PHP srcipt exit without error. If false, the exit is alway with error.
+     * @param int $exitCode If $exitGraceful is false, this value must be geater than 0.
+     */
+    protected function defineExitModeAndCode(bool $exitGraceful, int $exitCode = 1): void
+    {
+        if (!function_exists('win32_set_service_exit_mode')) {
+            return;
+        }
+
+        win32_set_service_exit_mode($exitGraceful);
+        win32_set_service_exit_code($exitCode);
     }
 }
 

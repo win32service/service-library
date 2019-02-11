@@ -9,6 +9,7 @@ namespace Win32Service\Model;
 
 
 use Win32Service\Exception\ServiceStatusException;
+use Win32Service\Exception\StopLoopException;
 use Win32Service\Exception\Win32ServiceException;
 use Win32Service\Service\ServiceInformationsTrait;
 
@@ -34,20 +35,41 @@ abstract class AbstractServiceRunner
      */
     private $lastRunDuration;
 
+    /**
+     * @var bool
+     */
+    private $stopRequested;
+
     public function __construct(ServiceIdentificator $serviceId)
     {
         $this->serviceId = $serviceId;
         $this->paused = false;
+        $this->stopRequested = false;
         $this->slowRunduration = 0.0;
         $this->lastRunDuration = 0.0;
     }
 
+    /**
+     * Return the last duration execution of run()
+     * @return float
+     */
     public function lastRunDuration(): float {
         return $this->lastRunDuration;
     }
 
+    /**
+     * Return the slowet time of run() execution
+     * @return float
+     */
     public function slowRunDuration(): float {
         return $this->slowRunduration;
+    }
+
+    /**
+     * Request stop the service without use the Service Manager.
+     */
+    public function requestStop() {
+        $this->stopRequested = true;
     }
 
     /**
@@ -88,7 +110,8 @@ abstract class AbstractServiceRunner
      * @throws \Win32Service\Exception\ServiceAccessDeniedException
      * @throws \Win32Service\Exception\ServiceNotFoundException
      */
-    public function doRun() {
+    public function doRun($maxRun = -1) {
+        $loopCount = 0;
         if (true !== win32_start_service_ctrl_dispatcher($this->serviceId->serviceId())) {
             throw new Win32ServiceException('Error on start service controller');
         }
@@ -99,7 +122,7 @@ abstract class AbstractServiceRunner
         win32_set_service_status(WIN32_SERVICE_START_PENDING);
         $this->setup();
 
-        while (WIN32_SERVICE_CONTROL_STOP != $ctr_msg = win32_get_last_control_message()) {
+        while (WIN32_SERVICE_CONTROL_STOP != $ctr_msg = win32_get_last_control_message() && !$this->stopRequested) {
             if ($ctr_msg === WIN32_SERVICE_CONTROL_INTERROGATE) {
                 win32_set_service_status($this->paused ? WIN32_SERVICE_PAUSED : WIN32_SERVICE_RUNNING);
 
@@ -119,16 +142,25 @@ abstract class AbstractServiceRunner
             }
 
             if (!$this->paused) {
-                // If not paused, run the action loop.
-                $startRun = microtime(true);
-                $this->run($ctr_msg);
-                $this->lastRunDuration= microtime(true) - $startRun;
-                if ($this->slowRunduration < $this->lastRunDuration) {
-                    $this->slowRunduration = $this->lastRunDuration;
-                }
-                // if run ins too slow, call the special function on service
-                if ($this->lastRunDuration > 30.0) {
-                    $this->lastRunIsTooSlow($this->lastRunDuration);
+                try {
+                    $loopCount++;
+                    if ($maxRun > 0 && $loopCount > $maxRun) {
+                        throw new StopLoopException('Max loop reached');
+                    }
+                    // If not paused, run the action loop.
+                    $startRun = microtime(true);
+                    $this->run($ctr_msg);
+                    $this->lastRunDuration = microtime(true) - $startRun;
+                    if ($this->slowRunduration < $this->lastRunDuration) {
+                        $this->slowRunduration = $this->lastRunDuration;
+                    }
+                    // if run is too slow, call the special function on service
+                    if ($this->lastRunDuration > 30.0) {
+                        $this->lastRunIsTooSlow($this->lastRunDuration);
+                    }
+                } catch (StopLoopException $e) {
+                    $this->requestStop();
+
                 }
             }
 

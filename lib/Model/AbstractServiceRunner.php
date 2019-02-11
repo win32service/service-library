@@ -105,12 +105,16 @@ abstract class AbstractServiceRunner
     protected abstract function lastRunIsTooSlow(float $duration): void;
 
     /**
+     * @param int $maxRun
      * @throws ServiceStatusException
      * @throws Win32ServiceException
      * @throws \Win32Service\Exception\ServiceAccessDeniedException
      * @throws \Win32Service\Exception\ServiceNotFoundException
      */
-    public function doRun($maxRun = -1) {
+    public function doRun(int $maxRun = -1) {
+        if ($this->serviceId === null) {
+            throw new  Win32ServiceException('Please run '.__CLASS__.'::__construct');
+        }
         $loopCount = 0;
         if (true !== win32_start_service_ctrl_dispatcher($this->serviceId->serviceId())) {
             throw new Win32ServiceException('Error on start service controller');

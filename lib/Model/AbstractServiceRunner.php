@@ -73,6 +73,19 @@ abstract class AbstractServiceRunner
     }
 
     /**
+     * Handle process signals for Unix Run.
+     *
+     * @param int $signal The signalcode to handle
+     */
+    public function handleSignal($signal)
+    {
+        var_dump('PCNTL SIGNAL ',$signal);
+        if ($signal == SIGTERM || $signal == SIGINT) {
+            $this->requestStop();
+        }
+    }
+
+    /**
      * This function is runnning in loop. The running duration is limited to 30 seconds
      * @param int $control contains the last control.
      * @return void
@@ -112,9 +125,8 @@ abstract class AbstractServiceRunner
      * @throws \Win32Service\Exception\ServiceNotFoundException
      */
     public function doRun(int $maxRun = -1) {
-        if ($this->serviceId === null) {
-            throw new  Win32ServiceException('Please run '.__CLASS__.'::__construct');
-        }
+        $this->init($maxRun);
+
         $loopCount = 0;
         if (true !== win32_start_service_ctrl_dispatcher($this->serviceId->serviceId())) {
             throw new Win32ServiceException('Error on start service controller');
@@ -126,7 +138,7 @@ abstract class AbstractServiceRunner
         win32_set_service_status(WIN32_SERVICE_START_PENDING);
         $this->setup();
 
-        while (WIN32_SERVICE_CONTROL_STOP != $ctr_msg = win32_get_last_control_message() && !$this->stopRequested) {
+        while (WIN32_SERVICE_CONTROL_STOP != ($ctr_msg = win32_get_last_control_message()) && !$this->stopRequested) {
             if ($ctr_msg === WIN32_SERVICE_CONTROL_INTERROGATE) {
                 win32_set_service_status($this->paused ? WIN32_SERVICE_PAUSED : WIN32_SERVICE_RUNNING);
 
@@ -149,6 +161,7 @@ abstract class AbstractServiceRunner
                 try {
                     $loopCount++;
                     if ($maxRun > 0 && $loopCount > $maxRun) {
+                        var_dump($loopCount);
                         throw new StopLoopException('Max loop reached');
                     }
                     // If not paused, run the action loop.
@@ -164,7 +177,7 @@ abstract class AbstractServiceRunner
                     }
                 } catch (StopLoopException $e) {
                     $this->requestStop();
-
+                    var_dump($e);
                 }
             }
 
@@ -193,6 +206,21 @@ abstract class AbstractServiceRunner
 
         win32_set_service_exit_mode($exitGraceful);
         win32_set_service_exit_code($exitCode);
+    }
+
+    /**
+     * Check and initialize the service.
+     * @param int $maxRun
+     * @throws Win32ServiceException
+     */
+    private function init(int $maxRun) {
+        if ($this->serviceId === null) {
+            throw new  Win32ServiceException('Please run '.__CLASS__.'::__construct');
+        }
+
+        if (strtolower(PHP_OS_FAMILY) !== 'windows' && $maxRun < 1) {
+            throw new  Win32ServiceException('Please define runMax argument greater than 0');
+        }
     }
 }
 

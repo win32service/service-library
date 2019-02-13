@@ -135,13 +135,8 @@ define("WIN32_SERVICE_ERROR_SEVERE",    0x00000002, true);  /* 0x00000002 The st
 define("WIN32_SERVICE_ERROR_CRITICAL",  0x00000003, true);  /* 0x00000003 The startup program logs the error in the event log, if possible.
                                                                           If the last-known-good configuration is being started, the startup operation fails. Otherwise, the system is restarted with the last-known good configuration. */
 
-
-
-
 /* dwServiceFlags */
 define("WIN32_SERVICE_RUNS_IN_SYSTEM_PROCESS",  0x00000001, true);  /* 0x00000001 The service runs in a system process that must always be running. */
-
-
 
 
 /* Error constants generated in communication with the SCM */
@@ -189,12 +184,31 @@ define("WIN32_IDLE_PRIORITY_CLASS",         0x00000040, true);  /* 0x00000040 Pr
 define("WIN32_NORMAL_PRIORITY_CLASS",       0x00000020, true);  /* 0x00000020 Process with no special scheduling needs. */
 define("WIN32_REALTIME_PRIORITY_CLASS",     0x00000100, true);  /* 0x00000100 Process that has the highest possible priority. The threads of the process preempt the threads of all other processes, including operating system processes performing important tasks. For example, a real-time process that executes for more than a very brief interval can cause disk caches not to flush or cause the mouse to be unresponsive. */
 
+/* Win32 Recovery Constants */
+define("WIN32_SC_ACTION_NONE",          0x00000000, true);		/* 0x00000000 No Action */
+define("WIN32_SC_ACTION_REBOOT",        0x00000001, true);		/* 0x00000001 Reboot the computer */
+define("WIN32_SC_ACTION_RESTART",       0x00000002, true);		/* 0x00000002 Restart the service */
+define("WIN32_SC_ACTION_RUN_COMMAND",   0x00000003, true);		/* 0x00000003 Run the command */
+
 /* Win32 Informations Keys */
-define("INFO_SERVICE",        "service",     true);
-define("INFO_DISPLAY",        "display",     true);
-define("INFO_USER",           "user",        true);
-define("INFO_PASSWORD",       "password",    true);
-define("INFO_PATH",           "path",        true);
-define("INFO_PARAMS",         "params",      true);
-define("INFO_DESCRIPTION",    "description", true);
-define("INFO_START_TYPE",     "start_type",  true);
+define("INFO_SERVICE",                      "service",                  true);
+define("INFO_DISPLAY",                      "display",                  true);
+define("INFO_USER",                         "user",                     true);
+define("INFO_PASSWORD",                     "password",                 true);
+define("INFO_PATH",                         "path",                     true);
+define("INFO_PARAMS",                       "params",                   true);
+define("INFO_DESCRIPTION",                  "description",              true);
+define("INFO_START_TYPE",                   "start_type",               true);
+define("WIN32_INFO_LOAD_ORDER",             "load_order",               true);
+define("WIN32_INFO_SVC_TYPE",               "svc_type",                 true);
+define("WIN32_INFO_ERROR_CONTROL",          "error_control",            true);
+define("WIN32_INFO_DELAYED_START",          "delayed_start",            true);
+define("WIN32_INFO_BASE_PRIORITY",          "base_priority",            true);
+define("WIN32_INFO_RECOVERY_DELAY",         "recovery_delay",           true);
+define("WIN32_INFO_RECOVERY_ACTION_1",      "recovery_action_1",        true);
+define("WIN32_INFO_RECOVERY_ACTION_2",      "recovery_action_2",        true);
+define("WIN32_INFO_RECOVERY_ACTION_3",      "recovery_action_3",        true);
+define("WIN32_INFO_RECOVERY_RESET_PERIOD",  "recovery_reset_period",    true);
+define("WIN32_INFO_RECOVERY_ENABLED",       "recovery_enabled",         true);
+define("WIN32_INFO_RECOVERY_REBOOT_MSG",    "recovery_reboot_msg",      true);
+define("WIN32_INFO_RECOVERY_COMMAND",       "recovery_command",         true);

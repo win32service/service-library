@@ -9,10 +9,10 @@
  */
 if (!defined("WIN32_INFO_SERVICE")) {
     /* Win32 Recovery Constants */
-    define("WIN32_SC_ACTION_NONE", 0);							/* 0x00000000 No Action */
-    define("WIN32_SC_ACTION_REBOOT", 1);							/* 0x00000001 Reboot the computer */
-    define("WIN32_SC_ACTION_RESTART", 2);							/* 0x00000002 Restart the service */
-    define("WIN32_SC_ACTION_RUN_COMMAND", 3);						/* 0x00000003 Run the command */
+    define("WIN32_SC_ACTION_NONE",          0x00000000, true);	/* 0x00000000 No Action */
+    define("WIN32_SC_ACTION_REBOOT",        0x00000001, true);  /* 0x00000001 Reboot the computer */
+    define("WIN32_SC_ACTION_RESTART",       0x00000002, true);	/* 0x00000002 Restart the service */
+    define("WIN32_SC_ACTION_RUN_COMMAND",   0x00000003, true);	/* 0x00000003 Run the command */
 
     /* Win32 Service informations */
     define("WIN32_INFO_SERVICE", "service");

@@ -9,6 +9,7 @@ namespace Win32Service\Service;
 
 use Win32Service\Exception\ServiceAccessDeniedException;
 use Win32Service\Exception\InvalidServiceStatusException;
+use Win32Service\Exception\ServiceAlreadyRegistredException;
 use Win32Service\Exception\ServiceNotFoundException;
 use Win32Service\Exception\ServiceRegistrationException;
 use Win32Service\Exception\ServiceUnregistrationException;
@@ -35,7 +36,7 @@ class ServiceAdminManager
     public function registerService(ServiceInformations $infos)
     {
         if ($this->serviceExists($infos)) {
-            throw new ServiceRegistrationException('Unable to register an existant service', 400);
+            throw new ServiceAlreadyRegistredException('Unable to register an existant service', 400);
         }
 
         $result = win32_create_service($infos->toArray(), $infos->machine());

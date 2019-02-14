@@ -72,17 +72,8 @@ abstract class AbstractServiceRunner
         $this->stopRequested = true;
     }
 
-    /**
-     * Handle process signals for Unix Run.
-     *
-     * @param int $signal The signalcode to handle
-     */
-    public function handleSignal($signal)
-    {
-        var_dump('PCNTL SIGNAL ',$signal);
-        if ($signal == SIGTERM || $signal == SIGINT) {
-            $this->requestStop();
-        }
+    protected function stopRequested() {
+        return $this->stopRequested;
     }
 
     /**

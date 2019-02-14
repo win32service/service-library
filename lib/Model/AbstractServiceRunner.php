@@ -137,6 +137,7 @@ abstract class AbstractServiceRunner
         }
         win32_set_service_status(WIN32_SERVICE_START_PENDING);
         $this->setup();
+        win32_set_service_status(WIN32_SERVICE_RUNNING);
 
         while (WIN32_SERVICE_CONTROL_STOP != ($ctr_msg = win32_get_last_control_message()) && !$this->stopRequested) {
             if ($ctr_msg === WIN32_SERVICE_CONTROL_INTERROGATE) {

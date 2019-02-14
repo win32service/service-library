@@ -72,6 +72,12 @@ abstract class AbstractServiceRunner
         $this->stopRequested = true;
     }
 
+    /**
+     * Return the value if stopping service is requested.
+     * If you use a loop in the `run` function, please check if stop is requested for each loop.
+     * And break the loop if this function return true.
+     * @return bool
+     */
     protected function stopRequested() {
         return $this->stopRequested;
     }

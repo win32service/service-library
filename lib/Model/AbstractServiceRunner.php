@@ -76,6 +76,7 @@ abstract class AbstractServiceRunner
      * Return the value if stopping service is requested.
      * If you use a loop in the `run` function, please check if stop is requested for each loop.
      * And break the loop if this function return true.
+     *
      * @return bool
      */
     protected function stopRequested() {
@@ -83,7 +84,11 @@ abstract class AbstractServiceRunner
     }
 
     /**
-     * This function is runnning in loop. The running duration is limited to 30 seconds
+     * This function is running in loop. The running duration is limited to 30 seconds.
+     * If your code work over 30 seconds, please consider using the generator.
+     * @See http://php.net/manual/en/language.generators.syntax.php
+     * @See http://php.net/manual/en/class.generator.php
+     *
      * @param int $control contains the last control.
      * @return void
      */

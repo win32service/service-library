@@ -204,6 +204,7 @@ define("WIN32_INFO_SVC_TYPE",               "svc_type",                 true);
 define("WIN32_INFO_ERROR_CONTROL",          "error_control",            true);
 define("WIN32_INFO_DELAYED_START",          "delayed_start",            true);
 define("WIN32_INFO_BASE_PRIORITY",          "base_priority",            true);
+define("WIN32_INFO_DEPENDENCIES",           "dependencies",             true);
 define("WIN32_INFO_RECOVERY_DELAY",         "recovery_delay",           true);
 define("WIN32_INFO_RECOVERY_ACTION_1",      "recovery_action_1",        true);
 define("WIN32_INFO_RECOVERY_ACTION_2",      "recovery_action_2",        true);

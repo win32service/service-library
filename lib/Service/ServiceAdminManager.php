@@ -53,7 +53,6 @@ class ServiceAdminManager
      * @throws ServiceAccessDeniedException
      * @throws ServiceNotFoundException
      * @throws \Win32Service\Exception\ServiceStatusException
-     * @throws ServiceUnRegistrationException
      * @throws \Win32Service\Exception\Win32ServiceException
      */
     public function unregisterService(ServiceInformations $infos) {

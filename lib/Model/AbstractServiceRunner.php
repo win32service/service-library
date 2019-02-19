@@ -13,7 +13,7 @@ use Win32Service\Exception\StopLoopException;
 use Win32Service\Exception\Win32ServiceException;
 use Win32Service\Service\ServiceInformationsTrait;
 
-abstract class AbstractServiceRunner
+abstract class AbstractServiceRunner implements RunnerServiceInterface
 {
     use ServiceInformationsTrait;
     /**
@@ -45,14 +45,18 @@ abstract class AbstractServiceRunner
      */
     private $threadNumber;
 
-    public function __construct(ServiceIdentificator $serviceId)
+    public function __construct()
     {
-        $this->serviceId = $serviceId;
         $this->paused = false;
         $this->threadNumber = -1;
         $this->stopRequested = false;
         $this->slowRunduration = 0.0;
         $this->lastRunDuration = 0.0;
+    }
+
+    public function setServiceId(ServiceIdentificator $serviceId)
+    {
+        $this->serviceId = $serviceId;
     }
 
     /**
@@ -221,7 +225,7 @@ abstract class AbstractServiceRunner
      * @param bool $exitGraceful If true, the PHP srcipt exit without error. If false, the exit is alway with error.
      * @param int $exitCode If $exitGraceful is false, this value must be geater than 0.
      */
-    protected function defineExitModeAndCode(bool $exitGraceful, int $exitCode = 1): void
+    public function defineExitModeAndCode(bool $exitGraceful, int $exitCode = 1): void
     {
         if (!function_exists('win32_set_service_exit_mode')) {
             return;

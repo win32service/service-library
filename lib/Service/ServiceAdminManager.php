@@ -13,6 +13,7 @@ use Win32Service\Exception\ServiceAlreadyRegistredException;
 use Win32Service\Exception\ServiceNotFoundException;
 use Win32Service\Exception\ServiceRegistrationException;
 use Win32Service\Exception\ServiceUnregistrationException;
+use Win32Service\Model\ServiceIdentificator;
 use Win32Service\Model\ServiceInformations;
 
 /**
@@ -48,14 +49,14 @@ class ServiceAdminManager
 
     /**
      * Remove the service from the service manager. The service do it stopped before unregistration.
-     * @param ServiceInformations $infos
+     * @param ServiceIdentificator $infos
      * @throws InvalidServiceStatusException
      * @throws ServiceAccessDeniedException
      * @throws ServiceNotFoundException
      * @throws \Win32Service\Exception\ServiceStatusException
      * @throws \Win32Service\Exception\Win32ServiceException
      */
-    public function unregisterService(ServiceInformations $infos) {
+    public function unregisterService(ServiceIdentificator $infos) {
 
         $status = $this->getServiceInformations($infos);
 

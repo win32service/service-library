@@ -78,6 +78,10 @@ class ServiceInformations implements \ArrayAccess, ServiceIdentificator
         return $this;
     }
 
+    public function defineIfStartIsDelayed(bool $startingDelayed) {
+        $this->datas[WIN32_INFO_DELAYED_START] = $startingDelayed;
+    }
+
     /**
      * @param int $delay Delay before trigger the action. In milliseconds (1000 = 1s)
      * @param bool $enabled Enable the recovery setting

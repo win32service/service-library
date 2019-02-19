@@ -10,6 +10,7 @@ namespace Win32Service\Service;
 use Win32Service\Exception\ServiceAccessDeniedException;
 use Win32Service\Exception\InvalidServiceStatusException;
 use Win32Service\Exception\ServiceAlreadyRegistredException;
+use Win32Service\Exception\ServiceMarkedForDeleteException;
 use Win32Service\Exception\ServiceNotFoundException;
 use Win32Service\Exception\ServiceRegistrationException;
 use Win32Service\Exception\ServiceUnregistrationException;
@@ -67,6 +68,9 @@ class ServiceAdminManager
         $result = win32_delete_service($infos->serviceId(), $infos->machine());
 
         $this->checkResponseAndConvertInExceptionIfNeed($result, $infos);
+        if ($result === WIN32_ERROR_SERVICE_MARKED_FOR_DELETE) {
+            throw new ServiceMarkedForDeleteException('The service is marked for delete. Please reboot the computer.', $result);
+        }
         $this->throwExceptionIfError($result, ServiceUnregistrationException::class, 'Error occured during unregistration service');
     }
 }

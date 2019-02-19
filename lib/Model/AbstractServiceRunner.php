@@ -40,14 +40,29 @@ abstract class AbstractServiceRunner
      */
     private $stopRequested;
 
+    /**
+     * @var int
+     */
+    private $threadNumber;
+
     public function __construct(ServiceIdentificator $serviceId)
     {
         $this->serviceId = $serviceId;
         $this->paused = false;
+        $this->threadNumber = -1;
         $this->stopRequested = false;
         $this->slowRunduration = 0.0;
         $this->lastRunDuration = 0.0;
     }
+
+    /**
+     * @return int
+     */
+    public function getThreadNumber(): int
+    {
+        return $this->threadNumber;
+    }
+
 
     /**
      * Return the last duration execution of run()
@@ -121,12 +136,17 @@ abstract class AbstractServiceRunner
 
     /**
      * @param int $maxRun
+     * @param int $threadNumber
      * @throws ServiceStatusException
      * @throws Win32ServiceException
      * @throws \Win32Service\Exception\ServiceAccessDeniedException
      * @throws \Win32Service\Exception\ServiceNotFoundException
      */
-    public function doRun(int $maxRun = -1) {
+    public function doRun(int $maxRun = -1, int $threadNumber = -1) {
+        $this->threadNumber = $threadNumber;
+        if ($threadNumber> -1) {
+            $this->serviceId = new ServiceIdentifier(sprintf($this->serviceId->serviceId(), $threadNumber), $this->serviceId->machine());
+        }
         $this->init($maxRun);
 
         $loopCount = 0;

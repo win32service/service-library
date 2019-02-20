@@ -9,9 +9,12 @@ namespace Win32Service\Service;
 
 use Win32Service\Exception\ServiceAccessDeniedException;
 use Win32Service\Exception\InvalidServiceStatusException;
+use Win32Service\Exception\ServiceAlreadyRegistredException;
+use Win32Service\Exception\ServiceMarkedForDeleteException;
 use Win32Service\Exception\ServiceNotFoundException;
 use Win32Service\Exception\ServiceRegistrationException;
 use Win32Service\Exception\ServiceUnregistrationException;
+use Win32Service\Model\ServiceIdentificator;
 use Win32Service\Model\ServiceInformations;
 
 /**
@@ -35,7 +38,7 @@ class ServiceAdminManager
     public function registerService(ServiceInformations $infos)
     {
         if ($this->serviceExists($infos)) {
-            throw new ServiceRegistrationException('Unable to register an existant service', 400);
+            throw new ServiceAlreadyRegistredException('Unable to register an existant service', 400);
         }
 
         $result = win32_create_service($infos->toArray(), $infos->machine());
@@ -47,15 +50,14 @@ class ServiceAdminManager
 
     /**
      * Remove the service from the service manager. The service do it stopped before unregistration.
-     * @param ServiceInformations $infos
+     * @param ServiceIdentificator $infos
      * @throws InvalidServiceStatusException
      * @throws ServiceAccessDeniedException
      * @throws ServiceNotFoundException
      * @throws \Win32Service\Exception\ServiceStatusException
-     * @throws ServiceUnRegistrationException
      * @throws \Win32Service\Exception\Win32ServiceException
      */
-    public function unregisterService(ServiceInformations $infos) {
+    public function unregisterService(ServiceIdentificator $infos) {
 
         $status = $this->getServiceInformations($infos);
 
@@ -66,6 +68,9 @@ class ServiceAdminManager
         $result = win32_delete_service($infos->serviceId(), $infos->machine());
 
         $this->checkResponseAndConvertInExceptionIfNeed($result, $infos);
+        if ($result === WIN32_ERROR_SERVICE_MARKED_FOR_DELETE) {
+            throw new ServiceMarkedForDeleteException('The service is marked for delete. Please reboot the computer.', $result);
+        }
         $this->throwExceptionIfError($result, ServiceUnregistrationException::class, 'Error occured during unregistration service');
     }
 }

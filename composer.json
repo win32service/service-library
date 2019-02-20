@@ -24,8 +24,7 @@
         }
     },
     "require": {
-        "php": "^7.1.0 <7.4.0",
-        "ext-win32service": "*"
+        "php": "^7.1.0 <7.4.0"
     },
     "require-dev": {
         "atoum/atoum": "^3.3"

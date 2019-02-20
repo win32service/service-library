@@ -25,9 +25,10 @@
 /**
  * Registers the script with the SCM, so that it can act as the service with the given name.
  * @param string $ServiceName Name of the service to represent.
+ * @param boolean $GracefulExit [optional] Set the exit mode.
  * @Return boolean|integer FALSE on success or Error code on failure.
  */
-function win32_start_service_ctrl_dispatcher( $ServiceName ) {}
+function win32_start_service_ctrl_dispatcher( $ServiceName , $GracefulExit) {}
 
 /**
  * Tells SCM the current status of the service.
@@ -98,3 +99,28 @@ function win32_pause_service( $ServiceName , $Machine ) {}
  * @Return boolean|integer WIN32_NO_ERROR on success. FALSE or Error code on failure.
  */
 function win32_continue_service( $ServiceName , $Machine ) {}
+
+/**
+ * Sen custom control value to the service.
+ * @param string $ServiceName Name of the service to query.
+ * @param integer $Control The control value between 128 and 255
+ * @param string $Machine [optional] Remote machine to unpause the service on. Probably only works in a Windows Domain.
+ * @Return boolean|integer WIN32_NO_ERROR on success. FALSE or Error code on failure.
+ */
+function win32_send_custom_control( $ServiceName , $Control , $Machine ) {}
+
+
+/**
+ * Set (or get) the exit code.
+ * @param integer $ExitCode [optional] The exit code returned on exit
+ * @return integer Current exit code, or old exit code if $ExitCode is defined
+ */
+function win32_set_service_exit_code( $ExitCode ) {}
+
+
+/**
+ * Get (or set) the exit mode.
+ * @param boolean $GracefulExit [optional] Set the exit mode.
+ * @return boolean Current exit mode, or old exit mode if $GrafeFulExit is defined
+ */
+function win32_set_service_exit_mode( $GracefulExit ) {}

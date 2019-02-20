@@ -19,12 +19,13 @@ class MyTestService extends AbstractServiceRunner
 {
 	/**
      * This function is runnning in loop. The running duration is limited to 30 seconds
+     * @param int $control contains the last control.
      * @return void
      */
-    protected function run(): void
+    protected function run(int $control): void
     {
-    	usleep(500);
-    	trigger_error('Main run', E_USER_NOTICE);
+    	usleep(1000);
+    	//trigger_error('Main run', E_USER_NOTICE);
     }
 
     /**
@@ -79,4 +80,4 @@ class MyTestService extends AbstractServiceRunner
 $serviceId = ServiceIdentifier::identify('my_test_service', 'localhost');
 
 // init and run the service
-(new MyTestService($serviceId))->doRun();
+(new MyTestService($serviceId))->doRun(100);

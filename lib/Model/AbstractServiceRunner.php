@@ -188,7 +188,6 @@ abstract class AbstractServiceRunner implements RunnerServiceInterface
                 try {
                     $loopCount++;
                     if ($maxRun > 0 && $loopCount > $maxRun) {
-                        var_dump($loopCount);
                         throw new StopLoopException('Max loop reached');
                     }
                     // If not paused, run the action loop.
@@ -204,7 +203,6 @@ abstract class AbstractServiceRunner implements RunnerServiceInterface
                     }
                 } catch (StopLoopException $e) {
                     $this->requestStop();
-                    var_dump($e);
                 }
             }
 

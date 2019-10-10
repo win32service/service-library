@@ -1,7 +1,8 @@
 <?php
 /**
- * @copy In Extenso (c) 2019
- * Added by : cameleon at 14/02/19 08:57
+ * This file is part of Win32Service Library package
+ * @copy Win32Service (c) 2018-2019
+ * @author "MacintoshPlus" <macintoshplus@mactronique.fr>
  */
 
 namespace Win32Service\Exception;

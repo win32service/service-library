@@ -1,7 +1,8 @@
 <?php
 /**
- * @copy In Extenso (c) 2018
- * Added by : cameleon at 10/12/18 11:05
+ * This file is part of Win32Service Library package
+ * @copy Win32Service (c) 2018-2019
+ * @author "MacintoshPlus" <macintoshplus@mactronique.fr>
  */
 
 /**

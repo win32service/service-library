@@ -17,7 +17,14 @@ if (php_sapi_name() !== 'cli') {
 
 class MyTestService extends AbstractServiceRunner
 {
-	/**
+
+    public function __construct(ServiceIdentifier $serviceIdentifier)
+    {
+        parent::__construct();
+        $this->setServiceId($serviceIdentifier);
+    }
+
+    /**
      * This function is runnning in loop. The running duration is limited to 30 seconds
      * @param int $control contains the last control.
      * @return void

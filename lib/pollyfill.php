@@ -88,7 +88,7 @@ if (!function_exists('win32_set_service_exit_code')) {
     }
 }
 if (!function_exists('win32_send_custom_control')) {
-    function win32_send_custom_control($ServiceName, $Machine) {
+    function win32_send_custom_control($ServiceName, $Control, $Machine) {
 
     }
 }

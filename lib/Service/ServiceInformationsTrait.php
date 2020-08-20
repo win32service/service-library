@@ -78,7 +78,7 @@ trait ServiceInformationsTrait
      */
     protected function throwExceptionIfError($value, string $exceptionClass, string $message): void
     {
-        if (class_exists($exceptionClass) === false || is_a($exceptionClass, Win32ServiceException::class) === false) {
+        if (class_exists($exceptionClass) === false || is_a($exceptionClass, Win32ServiceException::class, true) === false) {
             throw new Win32ServiceException(sprintf('Cannot throw object as it does not extend Exception or implement Throwable. Class provided "%s"', $exceptionClass));
         }
 

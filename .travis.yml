@@ -1,9 +1,20 @@
-language: java
-dist: trusty
 
-addons:
-  sonarcloud:
-    organization: "win32service"
-      
-script:
-  - sonar-scanner -Dsonar.projectKey=win32service_service-library -Dsonar.organization=win32service -Dsonar.sources=./lib -Dsonar.host.url=https://sonarcloud.io -Dsonar.test.inclusions=tests/**
+matrix:
+  include:
+    - language: java
+      dist: bionic
+
+      addons:
+        sonarcloud:
+          organization: "win32service"
+
+      script:
+        - sonar-scanner -Dsonar.projectKey=win32service_service-library -Dsonar.organization=win32service -Dsonar.sources=./lib -Dsonar.host.url=https://sonarcloud.io -Dsonar.test.inclusions=tests/**
+
+    - language: php
+      dist: bionic
+      php:
+        - 7.4
+      script:
+        - composer install
+        - php vendor/bin/psalm.phar

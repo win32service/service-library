@@ -1,41 +1,45 @@
 <?php
 /**
- * This file is part of Win32Service Library package
+ * This file is part of Win32Service Library package.
+ *
  * @copy Win32Service (c) 2018-2019
+ *
  * @author "MacintoshPlus" <macintoshplus@mactronique.fr>
  */
 
 namespace Win32Service\Service;
 
-use Win32Service\Exception\ServiceAccessDeniedException;
 use Win32Service\Exception\InvalidServiceStatusException;
+use Win32Service\Exception\ServiceAccessDeniedException;
 use Win32Service\Exception\ServiceAlreadyRegistredException;
 use Win32Service\Exception\ServiceMarkedForDeleteException;
 use Win32Service\Exception\ServiceNotFoundException;
 use Win32Service\Exception\ServiceRegistrationException;
+use Win32Service\Exception\ServiceStatusException;
 use Win32Service\Exception\ServiceUnregistrationException;
+use Win32Service\Exception\Win32ServiceException;
 use Win32Service\Model\ServiceIdentificator;
 use Win32Service\Model\ServiceInformations;
 
 /**
  * Class ServiceAdminManager
  * This service allow you to registrer and unregister the service from ServiceInformations
- * This action need Administrator priveleges
+ * This action need Administrator priveleges.
  */
 class ServiceAdminManager
 {
     use ServiceInformationsTrait;
 
     /**
-     * Register a new service
-     * @param ServiceInformations $infos
+     * Register a new service.
+     *
      * @throws ServiceAccessDeniedException
      * @throws ServiceRegistrationException
-     * @throws \Win32Service\Exception\ServiceStatusException
+     * @throws ServiceStatusException
      * @throws ServiceNotFoundException
-     * @throws \Win32Service\Exception\Win32ServiceException
+     * @throws Win32ServiceException
      */
-    public function registerService(ServiceInformations $infos)
+    public function registerService(ServiceInformations $infos): void
     {
         if ($this->serviceExists($infos)) {
             throw new ServiceAlreadyRegistredException('Unable to register an existant service', 400);
@@ -45,20 +49,19 @@ class ServiceAdminManager
 
         $this->checkResponseAndConvertInExceptionIfNeed($result, $infos);
         $this->throwExceptionIfError($result, ServiceRegistrationException::class, 'Error occured during registration service');
-
     }
 
     /**
      * Remove the service from the service manager. The service do it stopped before unregistration.
-     * @param ServiceIdentificator $infos
+     *
      * @throws InvalidServiceStatusException
      * @throws ServiceAccessDeniedException
      * @throws ServiceNotFoundException
-     * @throws \Win32Service\Exception\ServiceStatusException
-     * @throws \Win32Service\Exception\Win32ServiceException
+     * @throws ServiceStatusException
+     * @throws Win32ServiceException
      */
-    public function unregisterService(ServiceIdentificator $infos) {
-
+    public function unregisterService(ServiceIdentificator $infos): void
+    {
         $status = $this->getServiceInformations($infos);
 
         if (!$status->isStopped()) {

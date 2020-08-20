@@ -7,7 +7,7 @@
  * @author "MacintoshPlus" <macintoshplus@mactronique.fr>
  */
 
-/**
+/*
  * There constants are added in v0.4.0 of extension.
  */
 if (!\defined('WIN32_INFO_SERVICE')) {

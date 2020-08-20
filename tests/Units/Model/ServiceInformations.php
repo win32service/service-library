@@ -1,7 +1,9 @@
 <?php
 /**
- * This file is part of Win32Service Library package
+ * This file is part of Win32Service Library package.
+ *
  * @copy Win32Service (c) 2018-2019
+ *
  * @author "MacintoshPlus" <macintoshplus@mactronique.fr>
  */
 
@@ -12,7 +14,8 @@ use Win32Service\Model\ServiceIdentifier;
 
 class ServiceInformations extends atoum
 {
-    public function testInfos() {
+    public function testInfos()
+    {
         $this->if($this->newTestedInstance(ServiceIdentifier::identify('serviceId'), 'Service name', 'My greet service wrote in PHP', 'myService.php', 'run'))
             ->then
             ->assert('init')

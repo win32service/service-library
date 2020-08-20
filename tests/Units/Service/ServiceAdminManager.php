@@ -1,18 +1,19 @@
 <?php
 /**
- * This file is part of Win32Service Library package
+ * This file is part of Win32Service Library package.
+ *
  * @copy Win32Service (c) 2018-2019
+ *
  * @author "MacintoshPlus" <macintoshplus@mactronique.fr>
  */
 
 namespace Win32Service\Tests\Units\Service;
 
 use atoum;
-use mock;
 
 /**
- * Class ServiceStateManager
- * @package Win32Service\Tests\Units\Service
+ * Class ServiceStateManager.
+ *
  * @extensions win32service
  */
 class ServiceAdminManager extends atoum
@@ -35,11 +36,12 @@ class ServiceAdminManager extends atoum
             ))->isNull
         ;
     }
+
     public function testRegistrationTwice()
     {
         $this->assert('start')
             ->given($this->newTestedInstance())
-            ->if($this->function->win32_query_service_status = ['CurrentState'=>WIN32_SERVICE_STOPPED])
+            ->if($this->function->win32_query_service_status = ['CurrentState' => WIN32_SERVICE_STOPPED])
             ->and($this->function->win32_create_service = WIN32_NO_ERROR)
             ->then
             ->exception(function () {

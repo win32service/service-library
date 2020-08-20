@@ -6,7 +6,7 @@ platform:
 environment:
   win32service: 0.4.0
   xdebug: 2.7.2
-  
+
   matrix:
   - dependencies: current
     php_ver_target: 7.1
@@ -16,6 +16,9 @@ environment:
     vc: vc15
   - dependencies: current
     php_ver_target: 7.3
+    vc: vc15
+  - dependencies: current
+    php_ver_target: 7.4
     vc: vc15
 
 

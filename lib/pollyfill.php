@@ -104,28 +104,41 @@ if (!\function_exists('win32_get_last_control_message')) {
 }
 
 if (!\function_exists('win32_set_service_status')) {
-    $GLOBALS['__serviceStatus'] = WIN32_SERVICE_START_PENDING;
+    \define('WIN32_FAKE_SERVICE_STATUS', '__serviceStatus', false);
+    $GLOBALS[WIN32_FAKE_SERVICE_STATUS] = WIN32_SERVICE_START_PENDING;
     function win32_set_service_status($status)
     {
-        $GLOBALS['__serviceStatus'] = $status;
+        $GLOBALS[WIN32_FAKE_SERVICE_STATUS] = $status;
     }
 
     function win32_query_service_status($ServiceName, $Machine)
     {
-        return ['CurrentState' => $GLOBALS['__serviceStatus']];
+        return ['CurrentState' => $GLOBALS[WIN32_FAKE_SERVICE_STATUS]];
     }
 }
 if (!\function_exists('win32_set_service_exit_mode')) {
+    /*
+     * Empty function beacause, it not work on non WINNT operating System.
+     * Declared only for method exists.
+     */
     function win32_set_service_exit_mode($GracefulExit)
     {
     }
 }
 if (!\function_exists('win32_set_service_exit_code')) {
+    /*
+     * Empty function beacause, it not work on non WINNT operating System.
+     * Declared only for method exists.
+     */
     function win32_set_service_exit_code($ExitCode)
     {
     }
 }
 if (!\function_exists('win32_send_custom_control')) {
+    /*
+    * Empty function beacause, it not work on non WINNT operating System.
+    * Declared only for method exists.
+    */
     function win32_send_custom_control($ServiceName, $Control, $Machine)
     {
     }

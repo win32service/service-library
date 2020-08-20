@@ -4,22 +4,25 @@ platform:
 
 
 environment:
-  win32service: 0.4.0
-  xdebug: 2.7.2
+  win32service: 0.4.1
 
   matrix:
   - dependencies: current
     php_ver_target: 7.1
     vc: vc14
+    xdebug: 2.8.1
   - dependencies: current
     php_ver_target: 7.2
     vc: vc15
+    xdebug: 2.9.6
   - dependencies: current
     php_ver_target: 7.3
     vc: vc15
+    xdebug: 2.9.6
   - dependencies: current
     php_ver_target: 7.4
     vc: vc15
+    xdebug: 2.9.6
 
 
 ## Set up environment variables

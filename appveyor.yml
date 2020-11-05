@@ -86,7 +86,7 @@ install:
     - IF %PHP%==1 echo extension=php_mbstring.dll >> php.ini
     - IF %PHP%==1 echo extension=php_win32service.dll >> php.ini
     - IF %PHP%==1 echo extension=php_fileinfo.dll >> php.ini
-    - IF %PHP%==1 echo zend_extension=php_xdebug.dll >> php.ini
+#    - IF %PHP%==1 echo zend_extension=php_xdebug.dll >> php.ini
     - IF %PHP%==1 echo @php %%~dp0composer.phar %%* > composer.bat
     - appveyor-retry appveyor DownloadFile https://getcomposer.org/composer.phar
     - cd %APPVEYOR_BUILD_FOLDER%

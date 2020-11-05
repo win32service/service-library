@@ -4,7 +4,7 @@ platform:
 
 
 environment:
-  win32service: v1.0.0-alpha1
+  win32service: v1.0.0-alpha2
 
   matrix:
 #  - dependencies: current

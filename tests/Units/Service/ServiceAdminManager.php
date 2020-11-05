@@ -37,6 +37,27 @@ class ServiceAdminManager extends atoum
         ;
     }
 
+    public function testRegistrationError()
+    {
+        $this->assert('start')
+            ->given($this->newTestedInstance())
+            ->if($this->function->win32_query_service_status = WIN32_ERROR_SERVICE_DOES_NOT_EXIST)
+            ->and($this->function->win32_create_service->throw = new \Win32ServiceException('error', WIN32_ERROR_DUPLICATE_SERVICE_NAME))
+            ->then
+            ->exception(function () {
+                $this->testedInstance->registerService(
+                    new \Win32Service\Model\ServiceInformations(
+                        \Win32Service\Model\ServiceIdentifier::identify('servideId'),
+                        'Test Service Add',
+                        'My description',
+                        'me.php',
+                        'run'
+                    )
+                );
+            })->isInstanceOf(\Win32Service\Exception\Win32ServiceException::class)
+        ;
+    }
+
     public function testRegistrationTwice()
     {
         $this->assert('start')

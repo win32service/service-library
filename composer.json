@@ -27,11 +27,11 @@
         }
     },
     "require": {
-        "php": "^7.1.0 <8.1.0"
+        "php": "^7.1.0 || ^8.0"
     },
     "require-dev": {
-        "atoum/atoum": "^3.3",
-        "psalm/phar": "^3.14"
+        "atoum/atoum": "^3.3||dev-4.x",
+        "psalm/phar": "^3.14||^4.0"
     },
     "suggest": {
         "ext-win32service": "This extension is needed on Win32 platform. Download from https://pecl.php.net/package/win32service or https://github.com/win32service/win32service/releases"

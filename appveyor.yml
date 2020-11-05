@@ -63,11 +63,11 @@ install:
     - 7z x php.zip
     - cd ext
     - echo https://github.com/win32service/win32service/releases/download/%win32service%/php_win32service-%win32service%-8.0.zip
-    - curl -o win32service.zip https://github.com/win32service/win32service/releases/download/%win32service%/php_win32service-%win32service%-8.0.zip
+    - curl -L -o win32service.zip https://github.com/win32service/win32service/releases/download/%win32service%/php_win32service-%win32service%-8.0.zip
     - 7z e win32service.zip *.dll
     - move php_win32service-8.0-ts-vs16-x64.dll php_win32service.dll
     - echo https://xdebug.org/files/php_xdebug-%xdebug%-8.0-%vc%-x86_64.dll
-    - curl -o php_xdebug.dll https://xdebug.org/files/php_xdebug-%xdebug%-8.0-%vc%-x86_64.dll
+    - curl -L -o php_xdebug.dll https://xdebug.org/files/php_xdebug-%xdebug%-8.0-%vc%-x86_64.dll
 #    - ps: $env:php_final_ver=((choco search php --exact --all-versions -r | select-string -pattern $env:php_ver_target | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
 #    - ps: echo $env:php_final_ver
 #    - ps: appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version $env:php_final_ver

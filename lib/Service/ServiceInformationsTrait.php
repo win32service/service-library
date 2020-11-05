@@ -44,8 +44,11 @@ trait ServiceInformationsTrait
      */
     protected function getServiceInformations(ServiceIdentificator $service): ServiceStatus
     {
-        $infos = win32_query_service_status($service->serviceId(), $service->machine());
-
+        try {
+            $infos = win32_query_service_status($service->serviceId(), $service->machine());
+        } catch (\Win32ServiceException $e) {
+            $infos = $e->getCode();
+        }
         $this->checkResponseAndConvertInExceptionIfNeed($infos, $service);
 
         if (!\is_array($infos)) {
@@ -78,7 +81,11 @@ trait ServiceInformationsTrait
      */
     protected function throwExceptionIfError($value, string $exceptionClass, string $message): void
     {
-        if (class_exists($exceptionClass) === false || is_a($exceptionClass, Win32ServiceException::class, true) === false) {
+        if (class_exists($exceptionClass) === false || is_a(
+            $exceptionClass,
+            Win32ServiceException::class,
+            true
+        ) === false) {
             throw new Win32ServiceException(sprintf('Cannot throw object as it does not extend Exception or implement Throwable. Class provided "%s"', $exceptionClass));
         }
 

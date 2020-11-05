@@ -76,7 +76,11 @@ class ServiceStateManager
      */
     public function sendCustomControl(ServiceIdentificator $serviceId, int $control): void
     {
-        $result = win32_send_custom_control($serviceId->serviceId(), $serviceId->machine(), $control);
+        try {
+            $result = win32_send_custom_control($serviceId->serviceId(), $serviceId->machine(), $control);
+        } catch (\Win32ServiceException $e) {
+            $result = $e->getCode();
+        }
         $this->checkResponseAndConvertInExceptionIfNeed($result, $serviceId);
         $this->throwExceptionIfError(
             $result,

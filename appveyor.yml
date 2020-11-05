@@ -4,25 +4,30 @@ platform:
 
 
 environment:
-  win32service: 0.4.1
+  win32service: 1.0.0-alpha1
 
   matrix:
+#  - dependencies: current
+#    php_ver_target: 7.1
+#    vc: vc14
+#    xdebug: 2.8.1
+#  - dependencies: current
+#    php_ver_target: 7.2
+#    vc: vc15
+#    xdebug: 2.9.6
+#  - dependencies: current
+#    php_ver_target: 7.3
+#    vc: vc15
+#    xdebug: 2.9.6
+#  - dependencies: current
+#    php_ver_target: 7.4
+#    vc: vc15
+#    xdebug: 2.9.6
   - dependencies: current
-    php_ver_target: 7.1
-    vc: vc14
-    xdebug: 2.8.1
-  - dependencies: current
-    php_ver_target: 7.2
-    vc: vc15
-    xdebug: 2.9.6
-  - dependencies: current
-    php_ver_target: 7.3
-    vc: vc15
-    xdebug: 2.9.6
-  - dependencies: current
-    php_ver_target: 7.4
-    vc: vc15
-    xdebug: 2.9.6
+    php_ver_target: 8.0.0RC3
+    vc: vs16
+    xdebug: 3.0.0beta1
+
 
 
 ## Set up environment variables
@@ -50,16 +55,26 @@ install:
     # See https://github.com/chocolatey/choco/issues/1843
     - ps: choco install chocolatey -y --version 0.10.13 --allow-downgrade
     - appveyor-retry cinst -y curl 7zip
-    - ps: $env:php_final_ver=((choco search php --exact --all-versions -r | select-string -pattern $env:php_ver_target | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
-    - ps: echo $env:php_final_ver
-    - ps: appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version $env:php_final_ver
+
+    - mkdir c:\tools\php
     - cd c:\tools\php
+    - curl -o php.zip https://windows.php.net/downloads/qa/php-%php_ver_target%-ts-Win32-%vc%-x64.zip
+    - 7z e php.zip
     - cd ext
-    - echo https://windows.php.net/downloads/pecl/releases/win32service/%win32service%/php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip
-    - curl -o php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip https://windows.php.net/downloads/pecl/releases/win32service/%win32service%/php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip -A AppVeyor
-    - 7z e php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip *.dll
-    - curl -o php_xdebug-%xdebug%-%php_ver_target%-nts-%vc%-x64.zip https://windows.php.net/downloads/pecl/releases/xdebug/%xdebug%/php_xdebug-%xdebug%-%php_ver_target%-nts-%vc%-x64.zip -A AppVeyor
-    - 7z e php_xdebug-%xdebug%-%php_ver_target%-nts-%vc%-x64.zip *.dll
+    - curl -o win32service.zip https://github.com/win32service/win32service/releases/download/%win32service%/php_win32service-%win32service%-8.0.zip
+    - 7z e win32service.zip *.dll
+    - move php_win32service-8.0-ts-vs16-x64.dll php_win32service.dll
+    - curl -o php_xdebug.dll https://xdebug.org/files/php_xdebug-%xdebug%-8.0-%vc%-x86_64.dll
+#    - ps: $env:php_final_ver=((choco search php --exact --all-versions -r | select-string -pattern $env:php_ver_target | sort { [version]($_ -split '\|' | select -last 1) } -Descending | Select-Object -first 1) -replace '[php|]','')
+#    - ps: echo $env:php_final_ver
+#    - ps: appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version $env:php_final_ver
+#    - cd c:\tools\php
+#    - cd ext
+#    - echo https://windows.php.net/downloads/pecl/releases/win32service/%win32service%/php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip
+#    - curl -o php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip https://windows.php.net/downloads/pecl/releases/win32service/%win32service%/php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip -A AppVeyor
+#    - 7z e php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip *.dll
+#    - curl -o php_xdebug-%xdebug%-%php_ver_target%-nts-%vc%-x64.zip https://windows.php.net/downloads/pecl/releases/xdebug/%xdebug%/php_xdebug-%xdebug%-%php_ver_target%-nts-%vc%-x64.zip -A AppVeyor
+#    - 7z e php_xdebug-%xdebug%-%php_ver_target%-nts-%vc%-x64.zip *.dll
     - cd ..
     - IF %PHP%==1 copy php.ini-production php.ini /Y
     - IF %PHP%==1 echo date.timezone="UTC" >> php.ini

@@ -58,8 +58,8 @@ install:
 
     - mkdir c:\tools\php
     - cd c:\tools\php
-    - echo https://windows.php.net/downloads/qa/php-%php_ver_target%-ts-Win32-%vc%-x64.zip
-    - curl -o php.zip https://windows.php.net/downloads/qa/php-%php_ver_target%-ts-Win32-%vc%-x64.zip
+    - echo https://windows.php.net/downloads/qa/php-%php_ver_target%-Win32-%vc%-x64.zip
+    - curl -o php.zip https://windows.php.net/downloads/qa/php-%php_ver_target%-Win32-%vc%-x64.zip
     - 7z x php.zip
     - cd ext
     - curl -o win32service.zip https://github.com/win32service/win32service/releases/download/%win32service%/php_win32service-%win32service%-8.0.zip

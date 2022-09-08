@@ -27,7 +27,7 @@
         }
     },
     "require": {
-        "php": "^7.1.0 || ^8.0"
+        "php": "^^8.0"
     },
     "require-dev": {
         "atoum/atoum": "^3.3||4.x-dev",

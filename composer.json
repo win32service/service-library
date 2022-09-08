@@ -18,7 +18,8 @@
             "Win32Service\\": "lib/"
         },
         "files": [
-            "lib/pollyfill.php"
+            "lib/pollyfill-7.php",
+            "lib/pollyfill-8.php"
         ]
     },
     "autoload-dev": {

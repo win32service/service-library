@@ -6,7 +6,9 @@
  *
  * @author "MacintoshPlus" <macintoshplus@mactronique.fr>
  */
-
+if (PHP_VERSION_ID <= 70000 || PHP_VERSION_ID >= 80000) {
+    return;
+}
 /*
  * There constants are added in v0.4.0 of extension.
  */
@@ -17,7 +19,7 @@ if (!\defined('WIN32_INFO_SERVICE')) {
     \define('WIN32_SC_ACTION_RESTART', 0x00000002, false);    /* 0x00000002 Restart the service */
     \define('WIN32_SC_ACTION_RUN_COMMAND', 0x00000003, false);    /* 0x00000003 Run the command */
 
-    /* Win32 Service informations */
+    /* Win32 Service information */
     \define('WIN32_INFO_SERVICE', 'service', false);
     \define('WIN32_INFO_DISPLAY', 'display', false);
     \define('WIN32_INFO_USER', 'user', false);
@@ -142,4 +144,8 @@ if (!\function_exists('win32_send_custom_control')) {
     function win32_send_custom_control($ServiceName, $Control, $Machine)
     {
     }
+}
+
+if (!\class_exists(\Win32ServiceException::class)) {
+    class Win32ServiceException extends \Exception {}
 }

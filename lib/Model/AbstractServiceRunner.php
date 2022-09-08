@@ -155,7 +155,7 @@ abstract class AbstractServiceRunner implements RunnerServiceInterface
                     if ($this->lastRunDuration > 30.0) {
                         $this->lastRunIsTooSlow($this->lastRunDuration);
                     }
-                } catch (StopLoopException $e) {
+                } catch (StopLoopException) {
                     $this->requestStop();
                 }
             }
@@ -245,9 +245,12 @@ abstract class AbstractServiceRunner implements RunnerServiceInterface
         if ($this->serviceId === null) {
             throw new  Win32ServiceException('Please run '.__CLASS__.'::__construct');
         }
-
-        if (strtolower(PHP_OS) !== 'winnt' && $maxRun < 1) {
-            throw new  Win32ServiceException('Please define runMax argument greater than 0');
+        if (strtolower(PHP_OS) === 'winnt') {
+            return;
         }
+        if ($maxRun >= 1) {
+            return;
+        }
+        throw new  Win32ServiceException('Please define runMax argument greater than 0');
     }
 }

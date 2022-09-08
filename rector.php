@@ -32,7 +32,7 @@ return static function (RectorConfig $rectorConfig): void {
 //        SetList::CODING_STYLE,
 //        SetList::DEAD_CODE,
 //        SetList::EARLY_RETURN,
-        SetList::PHP_80,
+//        SetList::PHP_80,
 //        SetList::PSR_4,
 //        SetList::PRIVATIZATION,
 //        SetList::TYPE_DECLARATION,

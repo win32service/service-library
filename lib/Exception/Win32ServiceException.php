@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * This file is part of Win32Service Library package.
  *
@@ -9,9 +11,11 @@
 
 namespace Win32Service\Exception;
 
+use Exception;
+
 /**
  * Class Win32ServiceException the root exception of this library.
  */
-class Win32ServiceException extends \Exception
+class Win32ServiceException extends Exception
 {
 }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * This file is part of Win32Service Library package.
  *
@@ -10,6 +12,9 @@
 namespace Win32Service\Tests\Units\Service;
 
 use atoum;
+use Win32Service\Model\ServiceIdentifier;
+use Win32Service\Model\ServiceInformations;
+use Win32ServiceException;
 
 /**
  * Class ServiceStateManager.
@@ -26,8 +31,8 @@ class ServiceAdminManager extends atoum
             ->and($this->function->win32_create_service = WIN32_NO_ERROR)
             ->then
             ->variable($this->testedInstance->registerService(
-                new \Win32Service\Model\ServiceInformations(
-                    \Win32Service\Model\ServiceIdentifier::identify('servideId'),
+                new ServiceInformations(
+                    ServiceIdentifier::identify('servideId'),
                     'Test Service Add',
                     'My description',
                     'me.php',
@@ -42,12 +47,12 @@ class ServiceAdminManager extends atoum
         $this->assert('start')
             ->given($this->newTestedInstance())
             ->if($this->function->win32_query_service_status = WIN32_ERROR_SERVICE_DOES_NOT_EXIST)
-            ->and($this->function->win32_create_service->throw = new \Win32ServiceException('error', WIN32_ERROR_DUPLICATE_SERVICE_NAME))
+            ->and($this->function->win32_create_service->throw = new Win32ServiceException('error', WIN32_ERROR_DUPLICATE_SERVICE_NAME))
             ->then
             ->exception(function () {
                 $this->testedInstance->registerService(
-                    new \Win32Service\Model\ServiceInformations(
-                        \Win32Service\Model\ServiceIdentifier::identify('servideId'),
+                    new ServiceInformations(
+                        ServiceIdentifier::identify('servideId'),
                         'Test Service Add',
                         'My description',
                         'me.php',
@@ -67,8 +72,8 @@ class ServiceAdminManager extends atoum
             ->then
             ->exception(function () {
                 $this->testedInstance->registerService(
-                    new \Win32Service\Model\ServiceInformations(
-                        \Win32Service\Model\ServiceIdentifier::identify('servideId'),
+                    new ServiceInformations(
+                        ServiceIdentifier::identify('servideId'),
                         'Test Service Add',
                         'My description',
                         'me.php',

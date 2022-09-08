@@ -9,6 +9,7 @@
 
 namespace Win32Service\Service;
 
+use LogicException;
 use Win32Service\Exception\InvalidServiceStatusException;
 use Win32Service\Exception\ServiceAccessDeniedException;
 use Win32Service\Exception\ServiceNotFoundException;
@@ -103,29 +104,20 @@ class ServiceStateManager
         $function = sprintf('is%s', $check);
 
         if (!method_exists($status, $function)) {
-            throw new \LogicException(sprintf('The class %s does not implements %s', \get_class($status), $function));
+            throw new LogicException(sprintf('The class %s does not implements %s', $status::class, $function));
         }
 
         if ($status->{$function}() === false) {
             throw new InvalidServiceStatusException(sprintf('The service is not %s', $check));
         }
 
-        switch ($action) {
-            case 'start':
-                $result = win32_start_service($serviceId->serviceId(), $serviceId->machine());
-                break;
-            case 'stop':
-                $result = win32_stop_service($serviceId->serviceId(), $serviceId->machine());
-                break;
-            case 'pause':
-                $result = win32_pause_service($serviceId->serviceId(), $serviceId->machine());
-                break;
-            case 'continue':
-                $result = win32_continue_service($serviceId->serviceId(), $serviceId->machine());
-                break;
-            default:
-                throw new ServiceStateActionException(sprintf('Action "%s" for service is unknown', $action));
-        }
+        $result = match ($action) {
+            'start' => win32_start_service($serviceId->serviceId(), $serviceId->machine()),
+            'stop' => win32_stop_service($serviceId->serviceId(), $serviceId->machine()),
+            'pause' => win32_pause_service($serviceId->serviceId(), $serviceId->machine()),
+            'continue' => win32_continue_service($serviceId->serviceId(), $serviceId->machine()),
+            default => throw new ServiceStateActionException(sprintf('Action "%s" for service is unknown', $action)),
+        };
 
         $this->checkResponseAndConvertInExceptionIfNeed($result, $serviceId);
         $this->throwExceptionIfError(

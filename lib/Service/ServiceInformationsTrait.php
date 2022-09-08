@@ -29,7 +29,7 @@ trait ServiceInformationsTrait
         $exists = true;
         try {
             $this->getServiceInformations($serviceId);
-        } catch (ServiceNotFoundException $e) {
+        } catch (ServiceNotFoundException) {
             //Ok, the script can register the service
             $exists = false;
         }
@@ -59,12 +59,11 @@ trait ServiceInformationsTrait
     }
 
     /**
-     * @param mixed $value
      *
      * @throws ServiceAccessDeniedException
      * @throws ServiceNotFoundException
      */
-    protected function checkResponseAndConvertInExceptionIfNeed($value, ServiceIdentificator $service): void
+    protected function checkResponseAndConvertInExceptionIfNeed(mixed $value, ServiceIdentificator $service): void
     {
         if ($value === WIN32_ERROR_SERVICE_DOES_NOT_EXIST) {
             throw new ServiceNotFoundException('Service '.$service->serviceId().' is not found');
@@ -75,11 +74,9 @@ trait ServiceInformationsTrait
     }
 
     /**
-     * @param mixed $value
-     *
      * @throws Win32ServiceException
      */
-    protected function throwExceptionIfError($value, string $exceptionClass, string $message): void
+    protected function throwExceptionIfError(mixed $value, string $exceptionClass, string $message): void
     {
         if (class_exists($exceptionClass) === false || is_a(
             $exceptionClass,

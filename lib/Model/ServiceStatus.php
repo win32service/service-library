@@ -12,11 +12,9 @@ namespace Win32Service\Model;
 class ServiceStatus
 {
     const CURRENT_STATE = 'CurrentState';
-    private $datas;
 
-    public function __construct(array $datas)
+    public function __construct(private array $datas)
     {
-        $this->datas = $datas;
     }
 
     public function isStopped(): bool

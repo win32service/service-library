@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * This file is part of Win32Service Library package.
  *
@@ -10,6 +12,7 @@
 namespace Win32Service\Tests\Units\Service;
 
 use atoum;
+use Win32Service\Model\ServiceIdentifier;
 
 /**
  * Class ServiceStateManager.
@@ -25,7 +28,7 @@ class ServiceStateManager extends atoum
             ->if($this->function->win32_query_service_status = ['CurrentState' => WIN32_SERVICE_STOPPED])
             ->and($this->function->win32_start_service = WIN32_NO_ERROR)
             ->then
-            ->variable($this->testedInstance->startService(\Win32Service\Model\ServiceIdentifier::identify('servideId')))->isNull
+            ->variable($this->testedInstance->startService(ServiceIdentifier::identify('servideId')))->isNull
         ;
     }
 }

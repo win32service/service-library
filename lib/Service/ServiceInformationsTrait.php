@@ -59,11 +59,10 @@ trait ServiceInformationsTrait
     }
 
     /**
-     *
      * @throws ServiceAccessDeniedException
      * @throws ServiceNotFoundException
      */
-    protected function checkResponseAndConvertInExceptionIfNeed(mixed $value, ServiceIdentificator $service): void
+    protected function checkResponseAndConvertInExceptionIfNeed(?int $value, ServiceIdentificator $service): void
     {
         if ($value === WIN32_ERROR_SERVICE_DOES_NOT_EXIST) {
             throw new ServiceNotFoundException('Service '.$service->serviceId().' is not found');
@@ -76,7 +75,7 @@ trait ServiceInformationsTrait
     /**
      * @throws Win32ServiceException
      */
-    protected function throwExceptionIfError(mixed $value, string $exceptionClass, string $message): void
+    protected function throwExceptionIfError(?int $value, string $exceptionClass, string $message): void
     {
         if (class_exists($exceptionClass) === false || is_a(
             $exceptionClass,
@@ -86,7 +85,7 @@ trait ServiceInformationsTrait
             throw new Win32ServiceException(sprintf('Cannot throw object as it does not extend Exception or implement Throwable. Class provided "%s"', $exceptionClass));
         }
 
-        if ($value !== WIN32_NO_ERROR) {
+        if ($value !== null && $value !== WIN32_NO_ERROR) {
             throw new $exceptionClass($message, $value);
         }
     }

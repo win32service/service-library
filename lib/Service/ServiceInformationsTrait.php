@@ -49,7 +49,7 @@ trait ServiceInformationsTrait
         } catch (\Win32ServiceException $e) {
             $infos = $e->getCode();
         }
-        $this->checkResponseAndConvertInExceptionIfNeed($infos, $service);
+        $this->checkResponseAndConvertInExceptionIfNeed(\is_array($infos) ? null : $infos, $service);
 
         if (!\is_array($infos)) {
             throw new ServiceStatusException('Error on read service status', $infos);
@@ -65,10 +65,10 @@ trait ServiceInformationsTrait
     protected function checkResponseAndConvertInExceptionIfNeed(?int $value, ServiceIdentificator $service): void
     {
         if ($value === WIN32_ERROR_SERVICE_DOES_NOT_EXIST) {
-            throw new ServiceNotFoundException('Service '.$service->serviceId().' is not found');
+            throw new ServiceNotFoundException('Service ' . $service->serviceId() . ' is not found');
         }
         if ($value === WIN32_ERROR_ACCESS_DENIED) {
-            throw new ServiceAccessDeniedException('Access to service '.$service->serviceId().' is denied');
+            throw new ServiceAccessDeniedException('Access to service ' . $service->serviceId() . ' is denied');
         }
     }
 
@@ -78,11 +78,12 @@ trait ServiceInformationsTrait
     protected function throwExceptionIfError(?int $value, string $exceptionClass, string $message): void
     {
         if (class_exists($exceptionClass) === false || is_a(
-            $exceptionClass,
-            Win32ServiceException::class,
-            true
-        ) === false) {
-            throw new Win32ServiceException(sprintf('Cannot throw object as it does not extend Exception or implement Throwable. Class provided "%s"', $exceptionClass));
+                $exceptionClass,
+                Win32ServiceException::class,
+                true
+            ) === false) {
+            throw new Win32ServiceException(sprintf('Cannot throw object as it does not extend Exception or implement Throwable. Class provided "%s"',
+                $exceptionClass));
         }
 
         if ($value !== null && $value !== WIN32_NO_ERROR) {

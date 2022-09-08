@@ -32,23 +32,16 @@ class ServiceInformations implements ArrayAccess, ServiceIdentificator, Stringab
         WIN32_INFO_PASSWORD,
     ];
     /**
-     * @var array Informations of service
+     * @var array<string, int|string> Information of service
      */
-    private $datas = [];
-    /**
-     * ServiceInformations constructor.
-     *
-     * @param string $serviceDiplayedName
-     * @param string $serviceDescripton
-     * @param string $scriptToRun
-     * @param string $scriptParams
-     */
+    private array $datas = [];
+
     public function __construct(
         private ServiceIdentifier $serviceId,
-        $serviceDiplayedName = '',
-        $serviceDescripton = '',
-        $scriptToRun = '',
-        $scriptParams = ''
+        string $serviceDiplayedName = '',
+        string $serviceDescripton = '',
+        string $scriptToRun = '',
+        string $scriptParams = ''
     ) {
         $this->datas[WIN32_INFO_DISPLAY] = $serviceDiplayedName;
         $this->datas[WIN32_INFO_DESCRIPTION] = $serviceDescripton;
@@ -63,11 +56,8 @@ class ServiceInformations implements ArrayAccess, ServiceIdentificator, Stringab
         return (string) isset($this->datas[WIN32_INFO_DISPLAY]) ?
             $this->datas[WIN32_INFO_DISPLAY] : $this->serviceId();
     }
-    /**
-     * @param string $userName
-     * @param string $password
-     */
-    public function defineUserService($userName, $password): self
+
+    public function defineUserService(string $userName, string $password): self
     {
         $this->datas[WIN32_INFO_USER] = $userName;
         $this->datas[WIN32_INFO_PASSWORD] = $password;
@@ -154,7 +144,7 @@ class ServiceInformations implements ArrayAccess, ServiceIdentificator, Stringab
     /**
      * @return mixed|string
      */
-    public function offsetGet(mixed $offset)
+    public function offsetGet(mixed $offset): mixed
     {
         if ($offset === WIN32_INFO_SERVICE) {
             return $this->serviceId();

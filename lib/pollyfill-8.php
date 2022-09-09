@@ -17,8 +17,8 @@ if (\PHP_VERSION_ID < 80000) {
 if (!\defined('WIN32_INFO_SERVICE')) {
     /* Win32 Recovery Constants */
     \define('WIN32_SC_ACTION_NONE', 0x00000000);    /* 0x00000000 No Action */
-    \define('WIN32_SC_ACTION_REBOOT', 0x00000001);  /* 0x00000001 Reboot the computer */
-    \define('WIN32_SC_ACTION_RESTART', 0x00000002);    /* 0x00000002 Restart the service */
+    \define('WIN32_SC_ACTION_RESTART', 0x00000001);    /* 0x00000001 Restart the service */
+    \define('WIN32_SC_ACTION_REBOOT', 0x00000002);  /* 0x00000002 Reboot the computer */
     \define('WIN32_SC_ACTION_RUN_COMMAND', 0x00000003);    /* 0x00000003 Run the command */
 
     /* Win32 Service information */

@@ -186,8 +186,8 @@ define("WIN32_REALTIME_PRIORITY_CLASS",     0x00000100, true);  /* 0x00000100 Pr
 
 /* Win32 Recovery Constants */
 define("WIN32_SC_ACTION_NONE",          0x00000000, true);		/* 0x00000000 No Action */
-define("WIN32_SC_ACTION_REBOOT",        0x00000001, true);		/* 0x00000001 Reboot the computer */
-define("WIN32_SC_ACTION_RESTART",       0x00000002, true);		/* 0x00000002 Restart the service */
+define("WIN32_SC_ACTION_RESTART",       0x00000001, true);		/* 0x00000001 Restart the service */
+define("WIN32_SC_ACTION_REBOOT",        0x00000002, true);		/* 0x00000002 Reboot the computer */
 define("WIN32_SC_ACTION_RUN_COMMAND",   0x00000003, true);		/* 0x00000003 Run the command */
 
 /* Win32 Informations Keys */

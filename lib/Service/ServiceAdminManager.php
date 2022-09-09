@@ -48,12 +48,13 @@ class ServiceAdminManager
             $result = win32_create_service($infos->toArray(), $infos->machine());
         } catch (\Win32ServiceException $e) {
             $result = $e->getCode();
+            $errorMessage = $e->getMessage();
         }
-        $this->checkResponseAndConvertInExceptionIfNeed($result, $infos);
+        $this->checkResponseAndConvertInExceptionIfNeed($result, $infos, $errorMessage ?? '');
         $this->throwExceptionIfError(
             $result,
             ServiceRegistrationException::class,
-            'Error occured during registration service'
+            'Error occured during registration service. '.($errorMessage ?? '')
         );
     }
 
@@ -77,15 +78,16 @@ class ServiceAdminManager
             $result = win32_delete_service($infos->serviceId(), $infos->machine());
         } catch (\Win32ServiceException $e) {
             $result = $e->getCode();
+            $errorMessage = $e->getMessage();
         }
-        $this->checkResponseAndConvertInExceptionIfNeed($result, $infos);
+        $this->checkResponseAndConvertInExceptionIfNeed($result, $infos, $errorMessage ?? '');
         if ($result === WIN32_ERROR_SERVICE_MARKED_FOR_DELETE) {
             throw new ServiceMarkedForDeleteException('The service is marked for delete. Please reboot the computer.', $result);
         }
         $this->throwExceptionIfError(
             $result,
             ServiceUnregistrationException::class,
-            'Error occured during unregistration service'
+            'Error occured during unregistration service. '.($errorMessage ?? '')
         );
     }
 }

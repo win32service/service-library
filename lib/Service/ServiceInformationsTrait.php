@@ -48,8 +48,9 @@ trait ServiceInformationsTrait
             $infos = win32_query_service_status($service->serviceId(), $service->machine());
         } catch (\Win32ServiceException $e) {
             $infos = $e->getCode();
+            $messageDetail = $e->getMessage();
         }
-        $this->checkResponseAndConvertInExceptionIfNeed(\is_array($infos) ? null : $infos, $service);
+        $this->checkResponseAndConvertInExceptionIfNeed(\is_array($infos) ? null : $infos, $service, $messageDetail ?? null);
 
         if (!\is_array($infos)) {
             throw new ServiceStatusException('Error on read service status', $infos);
@@ -62,13 +63,13 @@ trait ServiceInformationsTrait
      * @throws ServiceAccessDeniedException
      * @throws ServiceNotFoundException
      */
-    protected function checkResponseAndConvertInExceptionIfNeed(?int $value, ServiceIdentificator $service): void
+    protected function checkResponseAndConvertInExceptionIfNeed(?int $value, ServiceIdentificator $service, ?string $messageDetail = null): void
     {
         if ($value === WIN32_ERROR_SERVICE_DOES_NOT_EXIST) {
-            throw new ServiceNotFoundException('Service ' . $service->serviceId() . ' is not found');
+            throw new ServiceNotFoundException('Service ' . $service->serviceId() . ' is not found. '.$messageDetail);
         }
         if ($value === WIN32_ERROR_ACCESS_DENIED) {
-            throw new ServiceAccessDeniedException('Access to service ' . $service->serviceId() . ' is denied');
+            throw new ServiceAccessDeniedException('Access to service ' . $service->serviceId() . ' is denied. '.$messageDetail);
         }
     }
 

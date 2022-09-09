@@ -81,8 +81,9 @@ class ServiceStateManager
             $result = win32_send_custom_control($serviceId->serviceId(), $serviceId->machine(), $control);
         } catch (\Win32ServiceException $e) {
             $result = $e->getCode();
+            $errorMessage = $e->getMessage();
         }
-        $this->checkResponseAndConvertInExceptionIfNeed($result, $serviceId);
+        $this->checkResponseAndConvertInExceptionIfNeed($result, $serviceId, $errorMessage ?? '');
         $this->throwExceptionIfError(
             $result,
             Win32ServiceException::class,
@@ -111,19 +112,24 @@ class ServiceStateManager
             throw new InvalidServiceStatusException(sprintf('The service is not %s', $check));
         }
 
-        $result = match ($action) {
-            'start' => win32_start_service($serviceId->serviceId(), $serviceId->machine()),
-            'stop' => win32_stop_service($serviceId->serviceId(), $serviceId->machine()),
-            'pause' => win32_pause_service($serviceId->serviceId(), $serviceId->machine()),
-            'continue' => win32_continue_service($serviceId->serviceId(), $serviceId->machine()),
-            default => throw new ServiceStateActionException(sprintf('Action "%s" for service is unknown', $action)),
-        };
+        try {
+            $result = match ($action) {
+                'start' => win32_start_service($serviceId->serviceId(), $serviceId->machine()),
+                'stop' => win32_stop_service($serviceId->serviceId(), $serviceId->machine()),
+                'pause' => win32_pause_service($serviceId->serviceId(), $serviceId->machine()),
+                'continue' => win32_continue_service($serviceId->serviceId(), $serviceId->machine()),
+                default => throw new ServiceStateActionException(sprintf('Action "%s" for service is unknown', $action)),
+            };
+        } catch (\Win32ServiceException $e) {
+            $result = $e->getCode();
+            $errorMessage = $e->getMessage();
+        }
 
-        $this->checkResponseAndConvertInExceptionIfNeed($result, $serviceId);
+        $this->checkResponseAndConvertInExceptionIfNeed($result, $serviceId, $errorMessage ?? null);
         $this->throwExceptionIfError(
             $result,
             ServiceStateActionException::class,
-            sprintf('Unable to %s service', $action)
+            sprintf('Unable to %s service. %s', $action, $errorMessage ?? '')
         );
     }
 }

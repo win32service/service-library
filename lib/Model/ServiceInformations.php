@@ -45,7 +45,7 @@ class ServiceInformations implements ArrayAccess, ServiceIdentificator, Stringab
     ) {
         $this->datas[WIN32_INFO_DISPLAY] = $serviceDiplayedName;
         $this->datas[WIN32_INFO_DESCRIPTION] = $serviceDescripton;
-        $this->datas[WIN32_INFO_PATH] = '"'.\dirname(PHP_BINARY).'\\php-win.exe"';
+        $this->datas[WIN32_INFO_PATH] = \dirname(PHP_BINARY).'\\php-win.exe';
         $this->datas[WIN32_INFO_PARAMS] = sprintf('"%s" %s', $scriptToRun, $scriptParams);
     }
     /**

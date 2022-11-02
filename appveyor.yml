@@ -80,8 +80,8 @@ install:
     - echo https://windows.php.net/downloads/pecl/releases/win32service/%win32service%/php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip
     - curl -o php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip https://windows.php.net/downloads/pecl/releases/win32service/%win32service%/php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip -A AppVeyor
     - 7z e php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip *.dll
-    - curl -o php_xdebug-%xdebug%-%php_ver_target%-nts-%vc%-x64.zip https://windows.php.net/downloads/pecl/releases/xdebug/%xdebug%/php_xdebug-%xdebug%-%php_ver_target%-nts-%vc%-x64.zip -A AppVeyor
-    - 7z e php_xdebug-%xdebug%-%php_ver_target%-nts-%vc%-x64.zip *.dll
+#    - curl -o php_xdebug-%xdebug%-%php_ver_target%-nts-%vc%-x64.zip https://windows.php.net/downloads/pecl/releases/xdebug/%xdebug%/php_xdebug-%xdebug%-%php_ver_target%-nts-%vc%-x64.zip -A AppVeyor
+#    - 7z e php_xdebug-%xdebug%-%php_ver_target%-nts-%vc%-x64.zip *.dll
     - cd ..
     - IF %PHP%==1 copy php.ini-production php.ini /Y
     - IF %PHP%==1 echo date.timezone="UTC" >> php.ini

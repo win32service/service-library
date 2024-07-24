@@ -124,3 +124,10 @@ function win32_set_service_exit_code( $ExitCode ) {}
  * @return boolean Current exit mode, or old exit mode if $GrafeFulExit is defined
  */
 function win32_set_service_exit_mode( $GracefulExit ) {}
+
+
+
+win32_read_right_access_service(string $servicename, string $username, ?string $machine = null): \Win32Service\RightInfo {}
+win32_read_all_rights_access_service(string $servicename, ?string $machine = null): array<int, \Win32Service\RightInfo> {}
+win32_add_right_access_service(string $servicename, string $username, int right, ?string $machine = null): void {}
+win32_remove_right_access_service(string $servicename, string $username, ?string $machine = null): void {}

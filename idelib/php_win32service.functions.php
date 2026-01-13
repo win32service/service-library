@@ -126,8 +126,69 @@ function win32_set_service_exit_code( $ExitCode ) {}
 function win32_set_service_exit_mode( $GracefulExit ) {}
 
 
+/**
+ * Get user right access to specified service.
+ * @since 1.1.0
+ * @param string $ServiceName Name of the service to query.
+ * @param string $Username Read the right for this username.
+ * @param string $Machine [optional] Remote machine to unpause the service on. Probably only works in a Windows Domain.
+ */
+function win32_read_right_access_service( string $ServiceName, string $Username, ?string $Machine = null ): \Win32Service\RightInfo {}
 
-win32_read_right_access_service(string $servicename, string $username, ?string $machine = null): \Win32Service\RightInfo {}
-win32_read_all_rights_access_service(string $servicename, ?string $machine = null): array<int, \Win32Service\RightInfo> {}
-win32_add_right_access_service(string $servicename, string $username, int right, ?string $machine = null): void {}
-win32_remove_right_access_service(string $servicename, string $username, ?string $machine = null): void {}
+/**
+ * Get all service right access.
+ * @since 1.1.0
+ * @param string $ServiceName Name of the service to query.
+ * @param string $Machine [optional] Remote machine to unpause the service on. Probably only works in a Windows Domain.
+ */
+function win32_read_all_rights_access_service( string $ServiceName, ?string $Machine = null ): array<int, \Win32Service\RightInfo> {}
+
+/**
+ * Set rights for specified user on service
+ * @since 1.1.0
+ * @param string $ServiceName Name of the service to query.
+ * @param string $Username Read the right for this username?
+ * @param int $right The right value for the specified user.
+ * @param string $Machine [optional] Remote machine to unpause the service on. Probably only works in a Windows Domain.
+ */
+function win32_add_right_access_service( string $ServiceName, string $Username, int $right, ?string $Machine = null ): void {}
+
+/**
+ * Remove rights for specified user on service
+ * @since 1.1.0
+ * @param string $ServiceName Name of the service to query.
+ * @param string $Username Remove rights for this username.
+ * @param string $Machine [optional] Remote machine to unpause the service on. Probably only works in a Windows Domain.
+ */
+function win32_remove_right_access_service( string $ServiceName, string $Username, ?string $Machine = null ): void {}
+
+/**
+ * Get all enronment variables for service. Only for local service.
+ * @since 1.1.0
+ * @param string $ServiceName Name of the service to query.
+ */
+function win32_get_service_env_vars( string $ServiceName ): void {}
+
+/**
+ * Add enronment variables for service. Only for local service.
+ * @since 1.1.0
+ * @param string $ServiceName Name of the service to query.
+ * @param string $VarName Name of environment variable to add.
+ * @param string $VarValue Value of environment variable to add.
+ */
+function win32_add_service_env_var( string $ServiceName, string $VarName, string $VarValue ): void {}
+
+/**
+ * Remove enronment variables for service. Only for local service.
+ * @since 1.1.0
+ * @param string $ServiceName Name of the service to query.
+ * @param string $VarName Name of environment variable to remove.
+ */
+function win32_remove_service_env_var( string $ServiceName, string $VarName ): void {}
+
+/**
+ * Toggle pausing capability for current service. Only for service running context.
+ * @since 1.1.0
+ * @param bool $Enable Pause capability state.
+ */
+function win32_set_service_pause_resume_state( bool $Enable = true ): bool {}

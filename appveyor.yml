@@ -25,11 +25,11 @@ environment:
     xdebug: 3.5.0
   - dependencies: current
     php_ver_target: 8.4
-    vc: vc17
+    vc: vs17
     xdebug: 3.5.0
   - dependencies: current
     php_ver_target: 8.5
-    vc: vc17
+    vc: vs17
     xdebug: 3.5.0
 
 

@@ -2,7 +2,11 @@
     "name":  "win32service/service-library",
     "type": "library",
     "description": "Library for ease to use Win32Service PHP extension",
-    "homepage": "https://win32service.mactronique.fr/service_library.html",
+    "homepage": "https://github.com/win32service",
+    "support": {
+      "issues": "https://github.com/win32service/service-library/issues",
+      "source": "https://github.com/win32service/service-library/"
+    },
     "keywords": ["win32service", "service", "windows", "service manager"],
     "license": "MIT",
     "authors": [

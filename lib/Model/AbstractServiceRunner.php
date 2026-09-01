@@ -52,6 +52,9 @@ abstract class AbstractServiceRunner implements RunnerServiceInterface
      */
     private $threadNumber;
 
+    /** @var bool */
+    private $canPaused;
+
     public function __construct()
     {
         $this->paused = false;
@@ -60,6 +63,7 @@ abstract class AbstractServiceRunner implements RunnerServiceInterface
         $this->stopRequested = false;
         $this->slowRunduration = 0.0;
         $this->lastRunDuration = 0.0;
+        $this->canPaused = true;
     }
 
     /**
@@ -102,16 +106,19 @@ abstract class AbstractServiceRunner implements RunnerServiceInterface
     public function doRun(int $maxRun = -1, int $threadNumber = -1): void
     {
         if ($this->serviceId === null) {
-            throw new Win32ServiceException(sprintf("Unable to start a service without ServiceIdentificator. Please call method '%s::setServiceId' before call '%s'", static::class, __METHOD__));
+            throw new Win32ServiceException(\sprintf("Unable to start a service without ServiceIdentificator. Please call method '%s::setServiceId' before call '%s'", static::class, __METHOD__));
         }
 
         $this->threadNumber = $threadNumber;
         if ($threadNumber > -1) {
             $this->serviceId = new ServiceIdentifier(
-                sprintf($this->serviceId->serviceId(), $threadNumber),
+                \sprintf($this->serviceId->serviceId(), $threadNumber),
                 $this->serviceId->machine()
             );
         }
+
+        win32_set_service_pause_resume_state($this->canPaused);
+
         $this->init($maxRun);
 
         $loopCount = 0;
@@ -199,6 +206,20 @@ abstract class AbstractServiceRunner implements RunnerServiceInterface
 
         win32_set_service_exit_mode($exitGraceful);
         win32_set_service_exit_code($exitCode);
+    }
+
+    public function canPaused(): bool
+    {
+        return $this->canPaused;
+    }
+
+    /**
+     * Define if the service can be paused or not.
+     * Has no effect if the service is already running.
+     */
+    public function setCanPaused(bool $canPaused): void
+    {
+        $this->canPaused = $canPaused;
     }
 
     /**

@@ -4,33 +4,33 @@ platform:
 
 
 environment:
-  win32service: 1.0.1
+  win32service: 1.1.0
 
   matrix:
-#  - dependencies: current
-#    php_ver_target: 7.1
-#    vc: vc14
-#    xdebug: 2.8.1
-#  - dependencies: current
-#    php_ver_target: 7.2
-#    vc: vc15
-#    xdebug: 2.9.6
-#  - dependencies: current
-#    php_ver_target: 7.3
-#    vc: vc15
-#    xdebug: 2.9.6
-#  - dependencies: current
-#    php_ver_target: 7.4
-#    vc: vc15
-#    xdebug: 2.9.6
   - dependencies: current
     php_ver_target: 8.0
     vc: vs16
-    xdebug: 3.1.5
+    xdebug: 3.5.0
   - dependencies: current
     php_ver_target: 8.1
     vc: vs16
-    xdebug: 3.1.5
+    xdebug: 3.5.0
+  - dependencies: current
+    php_ver_target: 8.2
+    vc: vs16
+    xdebug: 3.5.0
+  - dependencies: current
+    php_ver_target: 8.3
+    vc: vs16
+    xdebug: 3.5.0
+  - dependencies: current
+    php_ver_target: 8.4
+    vc: vs17
+    xdebug: 3.5.0
+  - dependencies: current
+    php_ver_target: 8.5
+    vc: vs17
+    xdebug: 3.5.0
 
 
 
@@ -77,8 +77,8 @@ install:
     - ps: appveyor-retry cinst --params '""/InstallDir:C:\tools\php""' --ignore-checksums -y php --version $env:php_final_ver
     - cd c:\tools\php
     - cd ext
-    - echo https://windows.php.net/downloads/pecl/releases/win32service/%win32service%/php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip
-    - curl -o php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip https://windows.php.net/downloads/pecl/releases/win32service/%win32service%/php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip -A AppVeyor
+    - echo https://downloads.php.net/~windows/pecl/releases/win32service/%win32service%/php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip
+    - curl -v -o php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip https://downloads.php.net/~windows/pecl/releases/win32service/%win32service%/php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip -A AppVeyor
     - 7z e php_win32service-%win32service%-%php_ver_target%-nts-%vc%-x64.zip *.dll
 #    - curl -o php_xdebug-%xdebug%-%php_ver_target%-nts-%vc%-x64.zip https://windows.php.net/downloads/pecl/releases/xdebug/%xdebug%/php_xdebug-%xdebug%-%php_ver_target%-nts-%vc%-x64.zip -A AppVeyor
 #    - 7z e php_xdebug-%xdebug%-%php_ver_target%-nts-%vc%-x64.zip *.dll

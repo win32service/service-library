@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * This file is part of Win32Service Library package.
  *
@@ -9,7 +11,6 @@
 
 namespace Win32Service\Service;
 
-use LogicException;
 use Win32Service\Exception\InvalidServiceStatusException;
 use Win32Service\Exception\ServiceAccessDeniedException;
 use Win32Service\Exception\ServiceNotFoundException;
@@ -87,7 +88,7 @@ class ServiceStateManager
         $this->throwExceptionIfError(
             $result,
             Win32ServiceException::class,
-            sprintf('Unable to custom control %d', $control)
+            \sprintf('Unable to custom control %d', $control)
         );
     }
 
@@ -102,14 +103,14 @@ class ServiceStateManager
     {
         $status = $this->getServiceInformations($serviceId);
 
-        $function = sprintf('is%s', $check);
+        $function = \sprintf('is%s', $check);
 
         if (!method_exists($status, $function)) {
-            throw new LogicException(sprintf('The class %s does not implements %s', $status::class, $function));
+            throw new \LogicException(\sprintf('The class %s does not implements %s', $status::class, $function));
         }
 
         if ($status->{$function}() === false) {
-            throw new InvalidServiceStatusException(sprintf('The service is not %s', $check));
+            throw new InvalidServiceStatusException(\sprintf('The service is not %s', $check));
         }
 
         try {
@@ -118,7 +119,7 @@ class ServiceStateManager
                 'stop' => win32_stop_service($serviceId->serviceId(), $serviceId->machine()),
                 'pause' => win32_pause_service($serviceId->serviceId(), $serviceId->machine()),
                 'continue' => win32_continue_service($serviceId->serviceId(), $serviceId->machine()),
-                default => throw new ServiceStateActionException(sprintf('Action "%s" for service is unknown', $action)),
+                default => throw new ServiceStateActionException(\sprintf('Action "%s" for service is unknown', $action)),
             };
         } catch (\Win32ServiceException $e) {
             $result = $e->getCode();
@@ -129,7 +130,7 @@ class ServiceStateManager
         $this->throwExceptionIfError(
             $result,
             ServiceStateActionException::class,
-            sprintf('Unable to %s service. %s', $action, $errorMessage ?? '')
+            \sprintf('Unable to %s service. %s', $action, $errorMessage ?? '')
         );
     }
 }

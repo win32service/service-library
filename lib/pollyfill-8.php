@@ -98,7 +98,7 @@ if (!\function_exists('win32_start_service_ctrl_dispatcher')) {
      * @throws ValueError            on invalid parameter
      * @throws Win32ServiceException when current SAPI is not 'cli'
      */
-    function win32_start_service_ctrl_dispatcher(string $name, bool $gracefulMode = true): void
+    function win32_start_service_ctrl_dispatcher(string $name, bool $gracefulExit = true): bool
     {
     }
 }
@@ -120,7 +120,7 @@ if (!\function_exists('win32_set_service_status')) {
      * @throws ValueError            on invalid parameter
      * @throws Win32ServiceException when current SAPI is not 'cli'
      */
-    function win32_set_service_status(int $status, int $checkpoint = 0): void
+    function win32_set_service_status(int $status, int $checkpoint = 0): bool
     {
         $GLOBALS[WIN32_FAKE_SERVICE_STATUS] = $status;
     }
@@ -141,9 +141,9 @@ if (!\function_exists('win32_set_service_exit_mode')) {
      *
      * @throws Win32ServiceException when current SAPI is not 'cli'
      */
-    function win32_set_service_exit_mode(bool $gracefulMode = true): bool
+    function win32_set_service_exit_mode(bool $gracefulExit = true): bool
     {
-        return $gracefulMode;
+        return $gracefulExit;
     }
 }
 if (!\function_exists('win32_set_service_exit_code')) {
@@ -172,8 +172,8 @@ if (!\function_exists('win32_send_custom_control')) {
     }
 }
 
-if (!class_exists(\Win32ServiceException::class)) {
-    class Win32ServiceException extends \Exception
+if (!class_exists(Win32ServiceException::class)) {
+    class Win32ServiceException extends Exception
     {
     }
 }

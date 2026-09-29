@@ -50,7 +50,7 @@ final class Win32ServiceFunctions
     public static function call(string $function, array $args): mixed
     {
         self::$calls[$function][] = $args;
-        $result = self::$results[$function] ?? throw new \LogicException(sprintf('No result defined for %s()', $function));
+        $result = self::$results[$function] ?? throw new \LogicException(\sprintf('No result defined for %s()', $function));
         if ($result instanceof \Throwable) {
             throw $result;
         }

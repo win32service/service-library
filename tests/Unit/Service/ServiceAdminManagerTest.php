@@ -26,17 +26,6 @@ class ServiceAdminManagerTest extends TestCase
         Win32ServiceFunctions::reset();
     }
 
-    private function infos(): ServiceInformations
-    {
-        return new ServiceInformations(
-            ServiceIdentifier::identify('servideId'),
-            'Test Service Add',
-            'My description',
-            'me.php',
-            'run'
-        );
-    }
-
     public function testRegistration(): void
     {
         Win32ServiceFunctions::willReturn('win32_query_service_status', WIN32_ERROR_SERVICE_DOES_NOT_EXIST);
@@ -66,5 +55,16 @@ class ServiceAdminManagerTest extends TestCase
         $this->expectExceptionMessage('Unable to register an existant service');
 
         (new ServiceAdminManager())->registerService($this->infos());
+    }
+
+    private function infos(): ServiceInformations
+    {
+        return new ServiceInformations(
+            ServiceIdentifier::identify('servideId'),
+            'Test Service Add',
+            'My description',
+            'me.php',
+            'run'
+        );
     }
 }

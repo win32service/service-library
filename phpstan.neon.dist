@@ -1,0 +1,8 @@
+parameters:
+    level: 4
+    paths:
+        - lib
+        - tests
+    excludePaths:
+        analyse:
+            - lib/pollyfill-8.php

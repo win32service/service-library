@@ -102,13 +102,13 @@ abstract class AbstractServiceRunner implements RunnerServiceInterface
     public function doRun(int $maxRun = -1, int $threadNumber = -1): void
     {
         if ($this->serviceId === null) {
-            throw new Win32ServiceException(sprintf("Unable to start a service without ServiceIdentificator. Please call method '%s::setServiceId' before call '%s'", static::class, __METHOD__));
+            throw new Win32ServiceException(\sprintf("Unable to start a service without ServiceIdentificator. Please call method '%s::setServiceId' before call '%s'", static::class, __METHOD__));
         }
 
         $this->threadNumber = $threadNumber;
         if ($threadNumber > -1) {
             $this->serviceId = new ServiceIdentifier(
-                sprintf($this->serviceId->serviceId(), $threadNumber),
+                \sprintf($this->serviceId->serviceId(), $threadNumber),
                 $this->serviceId->machine()
             );
         }

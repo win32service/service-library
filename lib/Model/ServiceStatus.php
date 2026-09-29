@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * This file is part of Win32Service Library package.
  *
@@ -11,7 +13,7 @@ namespace Win32Service\Model;
 
 class ServiceStatus
 {
-    const CURRENT_STATE = 'CurrentState';
+    public const CURRENT_STATE = 'CurrentState';
 
     public function __construct(private array $datas)
     {
@@ -19,25 +21,25 @@ class ServiceStatus
 
     public function isStopped(): bool
     {
-        return isset($this->datas[self::CURRENT_STATE]) &&
-            $this->datas[self::CURRENT_STATE] === WIN32_SERVICE_STOPPED;
+        return isset($this->datas[self::CURRENT_STATE])
+            && $this->datas[self::CURRENT_STATE] === WIN32_SERVICE_STOPPED;
     }
 
     public function isRunning(): bool
     {
-        return isset($this->datas[self::CURRENT_STATE]) &&
-            $this->datas[self::CURRENT_STATE] === WIN32_SERVICE_RUNNING;
+        return isset($this->datas[self::CURRENT_STATE])
+            && $this->datas[self::CURRENT_STATE] === WIN32_SERVICE_RUNNING;
     }
 
     public function isPaused(): bool
     {
-        return isset($this->datas[self::CURRENT_STATE]) &&
-            $this->datas[self::CURRENT_STATE] === WIN32_SERVICE_PAUSED;
+        return isset($this->datas[self::CURRENT_STATE])
+            && $this->datas[self::CURRENT_STATE] === WIN32_SERVICE_PAUSED;
     }
 
     public function starting(): bool
     {
-        return isset($this->datas[self::CURRENT_STATE]) &&
-            $this->datas[self::CURRENT_STATE] === WIN32_SERVICE_START_PENDING;
+        return isset($this->datas[self::CURRENT_STATE])
+            && $this->datas[self::CURRENT_STATE] === WIN32_SERVICE_START_PENDING;
     }
 }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * This file is part of Win32Service Library package.
  *
@@ -30,7 +32,7 @@ trait ServiceInformationsTrait
         try {
             $this->getServiceInformations($serviceId);
         } catch (ServiceNotFoundException) {
-            //Ok, the script can register the service
+            // Ok, the script can register the service
             $exists = false;
         }
 
@@ -66,10 +68,10 @@ trait ServiceInformationsTrait
     protected function checkResponseAndConvertInExceptionIfNeed(?int $value, ServiceIdentificator $service, ?string $messageDetail = null): void
     {
         if ($value === WIN32_ERROR_SERVICE_DOES_NOT_EXIST) {
-            throw new ServiceNotFoundException('Service ' . $service->serviceId() . ' is not found. '.$messageDetail);
+            throw new ServiceNotFoundException('Service '.$service->serviceId().' is not found. '.$messageDetail);
         }
         if ($value === WIN32_ERROR_ACCESS_DENIED) {
-            throw new ServiceAccessDeniedException('Access to service ' . $service->serviceId() . ' is denied. '.$messageDetail);
+            throw new ServiceAccessDeniedException('Access to service '.$service->serviceId().' is denied. '.$messageDetail);
         }
     }
 
@@ -79,12 +81,11 @@ trait ServiceInformationsTrait
     protected function throwExceptionIfError(?int $value, string $exceptionClass, string $message): void
     {
         if (class_exists($exceptionClass) === false || is_a(
-                $exceptionClass,
-                Win32ServiceException::class,
-                true
-            ) === false) {
-            throw new Win32ServiceException(sprintf('Cannot throw object as it does not extend Exception or implement Throwable. Class provided "%s"',
-                $exceptionClass));
+            $exceptionClass,
+            Win32ServiceException::class,
+            true
+        ) === false) {
+            throw new Win32ServiceException(\sprintf('Cannot throw object as it does not extend Exception or implement Throwable. Class provided "%s"', $exceptionClass));
         }
 
         if ($value !== null && $value !== WIN32_NO_ERROR) {

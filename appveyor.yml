@@ -24,10 +24,6 @@ environment:
 #    vc: vc15
 #    xdebug: 2.9.6
   - dependencies: current
-    php_ver_target: 8.0
-    vc: vs16
-    xdebug: 3.1.5
-  - dependencies: current
     php_ver_target: 8.1
     vc: vs16
     xdebug: 3.1.5
@@ -102,4 +98,4 @@ install:
 ## Run the actual test
 test_script:
     - cd %APPVEYOR_BUILD_FOLDER%
-    - vendor/bin/atoum
+    - vendor/bin/phpunit

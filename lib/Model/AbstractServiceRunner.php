@@ -135,6 +135,11 @@ abstract class AbstractServiceRunner implements RunnerServiceInterface
             win32_set_service_status(WIN32_SERVICE_RUNNING);
 
             while (($ctr_msg = win32_get_last_control_message()) != WIN32_SERVICE_CONTROL_STOP && !$this->stopRequested) {
+                if ($ctr_msg === WIN32_SERVICE_CONTROL_PRESHUTDOWN) {
+                    $this->requestStop();
+                    break;
+                }
+
                 if ($ctr_msg === WIN32_SERVICE_CONTROL_INTERROGATE) {
                     win32_set_service_status($this->paused ? WIN32_SERVICE_PAUSED : WIN32_SERVICE_RUNNING);
                 } elseif ($ctr_msg === WIN32_SERVICE_CONTROL_CONTINUE && $status->isPaused()) {

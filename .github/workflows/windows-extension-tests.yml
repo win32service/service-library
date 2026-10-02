@@ -1,0 +1,57 @@
+name: Windows extension tests
+
+on:
+  push:
+    branches: ['1.x']
+  pull_request:
+    branches: ['1.x']
+  workflow_dispatch:
+    inputs:
+      extension_version:
+        description: 'Version constraint of win32service/win32service to install via PIE (e.g. "1.0.0" or "^1.0"). Leave empty to install the latest stable version.'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  functional-tests:
+    name: PHP ${{ matrix.php }} (${{ matrix.ts }}, x64)
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1', '8.2', '8.3', '8.4', '8.5']
+        ts: ['ts', 'nts']
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: pie
+          coverage: none
+        env:
+          phpts: ${{ matrix.ts }}
+
+      - name: Install win32service extension via PIE
+        env:
+          EXTENSION_VERSION: ${{ github.event.inputs.extension_version }}
+        run: |
+          $package = "win32service/win32service"
+          if ($env:EXTENSION_VERSION -ne "") {
+            $package = "$($package):$($env:EXTENSION_VERSION)"
+          }
+          Write-Host "Installing $package"
+          pie install $package
+
+      - name: Check the extension is enabled
+        run: php --ri win32service
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress --prefer-dist
+
+      - name: Run service lifecycle functional test (register, start, stop, delete)
+        run: php .github/scripts/windows-service-tests/lifecycle-test.php

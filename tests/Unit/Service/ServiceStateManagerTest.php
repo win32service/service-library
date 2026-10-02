@@ -32,4 +32,15 @@ class ServiceStateManagerTest extends TestCase
 
         $this->assertCount(1, Win32ServiceFunctions::calls('win32_start_service'));
     }
+
+    public function testStartServiceWithEmptyStringAsMachine(): void
+    {
+        Win32ServiceFunctions::willReturn('win32_query_service_status', ['CurrentState' => WIN32_SERVICE_STOPPED]);
+        Win32ServiceFunctions::willReturn('win32_start_service', WIN32_NO_ERROR);
+
+        (new ServiceStateManager())->startService(ServiceIdentifier::identify('servideId', ''));
+
+        $this->assertCount(1, Win32ServiceFunctions::calls('win32_start_service'));
+        $this->assertSame(['servideId', ''], Win32ServiceFunctions::calls('win32_start_service')[0]);
+    }
 }

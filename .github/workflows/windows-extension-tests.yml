@@ -71,7 +71,10 @@ jobs:
             ProviderName = 'Service Control Manager'
             StartTime    = $since
           } -ErrorAction SilentlyContinue |
-            Where-Object { $_.Message -like '*win32service_lib_slow_start_test*' } |
+            Where-Object {
+              $_.Message -like '*win32service_lib_slow_start_test*' -or
+              $_.Message -like '*Win32Service Library slow-start functional test*'
+            } |
             Sort-Object TimeCreated
 
           if (-not $events) {
@@ -84,5 +87,11 @@ jobs:
           }
 
           if ($events | Where-Object { $_.Id -eq 7009 }) {
-            Write-Warning 'Event 7009: the Service Control Manager reported a timeout waiting for the service to report it was running, even though polling later observed WIN32_SERVICE_RUNNING.'
+            Write-Warning 'Event 7009: the Service Control Manager reported a timeout waiting for the service to connect, before even reaching the START_PENDING checkpoint logic.'
+          }
+
+          if ($events | Where-Object { $_.Id -eq 7000 -and $_.Message -like '*1053*' }) {
+            Write-Warning 'Event 7000: the Service Control Manager reported that the service failed to start with error 1053 (ERROR_SERVICE_REQUEST_TIMEOUT - "The service did not respond to the start or control request in a timely fashion"), matching the exception raised by ServiceStateManager::startService().'
+          } elseif ($events | Where-Object { $_.Id -eq 7000 }) {
+            Write-Warning 'Event 7000: the Service Control Manager reported that the service failed to start.'
           }

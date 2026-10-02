@@ -55,3 +55,6 @@ jobs:
 
       - name: Run service lifecycle functional test (register, start, stop, delete)
         run: php .github/scripts/windows-service-tests/lifecycle-test.php
+
+      - name: Run slow-start service lifecycle test (setup() over 30s, e.g. Symfony cache warmup)
+        run: php .github/scripts/windows-service-tests/slow-start-lifecycle-test.php

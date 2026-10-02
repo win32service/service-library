@@ -56,5 +56,33 @@ jobs:
       - name: Run service lifecycle functional test (register, start, stop, delete)
         run: php .github/scripts/windows-service-tests/lifecycle-test.php
 
+      - name: Record time before the slow-start test
+        run: echo "SLOW_START_TEST_BEGIN=$(Get-Date -Format o)" >> $env:GITHUB_ENV
+
       - name: Run slow-start service lifecycle test (setup() over 30s, e.g. Symfony cache warmup)
         run: php .github/scripts/windows-service-tests/slow-start-lifecycle-test.php
+
+      - name: Check Service Control Manager event log for start timeouts
+        if: always()
+        run: |
+          $since = [DateTime]::Parse($env:SLOW_START_TEST_BEGIN)
+          $events = Get-WinEvent -FilterHashtable @{
+            LogName      = 'System'
+            ProviderName = 'Service Control Manager'
+            StartTime    = $since
+          } -ErrorAction SilentlyContinue |
+            Where-Object { $_.Message -like '*win32service_lib_slow_start_test*' } |
+            Sort-Object TimeCreated
+
+          if (-not $events) {
+            Write-Host 'No Service Control Manager event referencing the slow-start test service was found.'
+            exit 0
+          }
+
+          foreach ($serviceEvent in $events) {
+            Write-Host "[$($serviceEvent.TimeCreated.ToString('o'))] Id=$($serviceEvent.Id) $($serviceEvent.LevelDisplayName): $($serviceEvent.Message)"
+          }
+
+          if ($events | Where-Object { $_.Id -eq 7009 }) {
+            Write-Warning 'Event 7009: the Service Control Manager reported a timeout waiting for the service to report it was running, even though polling later observed WIN32_SERVICE_RUNNING.'
+          }

@@ -34,9 +34,8 @@ function waitForState(ServiceIdentifier $serviceId, int $expectedState, string $
     throw new RuntimeException(sprintf('Timed out waiting for the service to reach state "%s"', $label));
 }
 
-function runServiceLifecycleTest(string $workerScript, string $displayName, int $startTimeoutSeconds): void
+function runServiceLifecycleTest(string $serviceName, string $workerScript, string $displayName, int $startTimeoutSeconds): void
 {
-    $serviceName = 'win32service_lib_functional_test_'.getmypid();
     $serviceId = ServiceIdentifier::identify($serviceName);
 
     $infos = new ServiceInformations(

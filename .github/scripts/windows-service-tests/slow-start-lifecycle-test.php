@@ -12,6 +12,7 @@ declare(strict_types=1);
 require __DIR__.'/lifecycle.php';
 
 runServiceLifecycleTest(
+    'win32service_lib_slow_start_test',
     __DIR__.'\\slow-start-service-worker.php',
     'Win32Service Library slow-start functional test',
     90

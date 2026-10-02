@@ -10,6 +10,7 @@ declare(strict_types=1);
 require __DIR__.'/lifecycle.php';
 
 runServiceLifecycleTest(
+    'win32service_lib_functional_test',
     __DIR__.'\\service-worker.php',
     'Win32Service Library functional test',
     30
